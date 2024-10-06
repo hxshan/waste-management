@@ -5,7 +5,7 @@ namespace WasteManagementApi.Tests
         [Fact]
         public void Test1()
         {
-
+            Console.Write("w");
         }
     }
 }
