@@ -1,18 +1,22 @@
 import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const DriverRegistrationForm = () => {
+  const navigate = useNavigate()
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     middleName: "",
     phoneNumber: "",
-    nicNumber: "",
+    nic: "",
     emergencyContact: "",
     dateOfHire: "",
     dateOfResignation: "",
     isActive: false,
-    salary: "",
     department: "",
     licenseNumber: "",
     licenceType: "",
@@ -21,7 +25,7 @@ const DriverRegistrationForm = () => {
     email: "",
     password: "",
   });
-
+const [salary,setSalary]=useState(0);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -32,8 +36,40 @@ const DriverRegistrationForm = () => {
 
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const prevStep = () => setStep((prevStep) => prevStep - 1);
-  const handleSubmit = (e) => {
+  const handleSubmit =  async (e) => {
     e.preventDefault();
+
+    try{
+      
+      console.log(formData.dateOfResignation)
+     
+      let res = await axios.post('http://localhost:5290/api/account/register-driver',
+        {...formData,
+          salary,
+          dateOfResignation:null
+        })
+      if(res.status == 200){
+        Swal.fire({
+          title: "Success",
+          text: "New Driver is saved Succesfully!",
+          icon: "success",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Ok"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/admin')
+          }
+        });
+      }
+    }catch(err){
+      Swal.fire({
+        title: "Error",
+        text: `${err?.message}}`,
+        icon:"error",
+        }
+      )
+    }
     
   };
   const renderStep = () => {
@@ -106,15 +142,15 @@ const DriverRegistrationForm = () => {
             </div>
             <div>
               <label
-                htmlFor="nicNumber"
+                htmlFor="nic"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
                 NIC Number
               </label>
               <input
-                id="nicNumber"
-                name="nicNumber"
-                value={formData.nicNumber}
+                id="nic"
+                name="nic"
+                value={formData.nic}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
@@ -223,8 +259,8 @@ const DriverRegistrationForm = () => {
                 name="salary"
                 type="number"
                 step="0.01"
-                value={formData.salary}
-                onChange={handleChange}
+                value={salary}
+                onChange={(e)=>{setSalary(Number(e.target.value))}}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
               />
             </div>
