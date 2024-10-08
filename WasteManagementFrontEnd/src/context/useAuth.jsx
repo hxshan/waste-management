@@ -26,25 +26,25 @@ export const UserProvider = ({ children }) =>{
         SetIsReady(true);
     },[]);
 
-    // const register = async (userName,email,password) => {
+    const register = async (userName,email,password) => {
 
-    //     await RegisterAPI(userName,email,password).then((res) =>{
-    //         if(res){
-    //             localStorage.setItem("token",res?.data.token);
-    //             const userObj ={
-    //                 userName: res?.data?.userName,
-    //                 email: res?.data?.email
-    //             };
-    //             localStorage.setItem("user",JSON.stringify(userObj));
-    //             SetToken(token)
-    //             SetUser(userObj);
-    //             navigate("/")
-    //         }
-    //     }).catch((e)=>{
-    //         toast.warning("Error")
-    //     })
+        await RegisterAPI(userName,email,password).then((res) =>{
+            if(res){
+                localStorage.setItem("token",res?.data.token);
+                const userObj ={
+                    userName: res?.data?.userName,
+                    email: res?.data?.email
+                };
+                localStorage.setItem("user",JSON.stringify(userObj));
+                SetToken(token)
+                SetUser(userObj);
+                navigate("/")
+            }
+        }).catch((e)=>{
+            toast.warning("Error")
+        })
 
-    // }
+    }
     
     const loginUser = async (email,password) => {
 

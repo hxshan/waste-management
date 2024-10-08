@@ -9,7 +9,7 @@
 # Optionally ignore environment-specific appsettings files
 /WasteManagementApi/appsettings.Development.json
 /WasteManagementApi/appsettings.Production.json
-
+/WasteManagementFrontEnd/.env
 
 # User-specific files
 *.rsuser
