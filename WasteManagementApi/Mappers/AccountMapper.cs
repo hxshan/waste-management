@@ -22,11 +22,32 @@ namespace WasteManagementApi.Mappers
                 DateOfHire = registerDto.DateOfHire,
                 DateOfResignation = null,
                 IsActive = registerDto.IsActive,
-                Salary = registerDto.Salary,
+                Salary =  registerDto.Salary,
                 Department = registerDto.Department,
                 LicenseNumber = registerDto.LicenseNumber,
                 LicenceType = registerDto.LicenceType,
                 LicenceExpiration = registerDto.LicenceExpiration,
+            };
+
+        }
+         public static HelperStaff MapHelperRegisterToHelper(HelperRegisterDto registerDto)
+        {
+            return new HelperStaff
+            {
+                UserName = registerDto.FirstName + registerDto.LastName,
+                Email = registerDto.Email,
+                FirstName = registerDto.FirstName,
+                MiddleName = registerDto.MiddleName,
+                LastName = registerDto.LastName,
+                NIC = registerDto.NIC,
+                EmergencyContact = registerDto.EmergencyContact,
+                Address = registerDto.Address,
+                PhoneNumber = registerDto.PhoneNumber,
+                DateOfHire = registerDto.DateOfHire,
+                DateOfResignation = null,
+                IsActive = registerDto.IsActive,
+                Salary =  registerDto.Salary,
+                Department = registerDto.Department,
             };
 
         }

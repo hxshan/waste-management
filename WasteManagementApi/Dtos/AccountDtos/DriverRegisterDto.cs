@@ -7,7 +7,7 @@ namespace WasteManagementApi.Dtos.AccountDtos
        
         public string? EmergencyContact { get; set; }
 
-        public string Address { get; set; }
+        
 
         [DataType(DataType.Date)]
         public DateTime? DateOfHire { get; set; }

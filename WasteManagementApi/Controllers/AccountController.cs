@@ -87,7 +87,7 @@ namespace WasteManagementApi.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest("Invalid Data Format");
                 }
                 var driver = AccountMapper.MapDriverRegisterToDriver(registerDto);
 
@@ -111,6 +111,49 @@ namespace WasteManagementApi.Controllers
                     UserName = driver.UserName,
                     Email = driver.Email,
                     Token = await _tokenService.CreateToken(driver)
+                });
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e);
+            }
+
+        }
+        
+        
+        
+        [HttpPost("register-helper")]
+        public async Task<IActionResult> RegisterHelper([FromBody] HelperRegisterDto registerDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid Data Format");
+                }
+                var helper = AccountMapper.MapHelperRegisterToHelper(registerDto);
+
+                var CreatedUser = await _userManager.CreateAsync(helper, registerDto.Password);
+
+                if (!CreatedUser.Succeeded)
+                {
+                    return StatusCode(500, CreatedUser.Errors);
+
+                }
+
+                var roleResult = await _userManager.AddToRoleAsync(helper, "Helper");
+
+                if (!roleResult.Succeeded)
+                {
+                    return StatusCode(500, roleResult.Errors);
+
+                }
+                return Ok(new NewUserDto
+                {
+                    UserName = helper.UserName,
+                    Email = helper.Email,
+                    Token = await _tokenService.CreateToken(helper)
                 });
 
             }

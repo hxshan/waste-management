@@ -15,7 +15,6 @@ const DriverRegistrationForm = () => {
     nic: "",
     emergencyContact: "",
     dateOfHire: "",
-    dateOfResignation: "",
     isActive: false,
     department: "",
     licenseNumber: "",
@@ -26,22 +25,34 @@ const DriverRegistrationForm = () => {
     password: "",
   });
 const [salary,setSalary]=useState(0);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
 
+const handleChange = (e) => {
+  const { name, value, type } = e.target;
+  
+  // Convert checkbox values
+  const finalValue = type === 'checkbox' ? e.target.checked : value;
+  
+  setFormData((prevData) => ({
+    ...prevData,
+    [name]: finalValue,
+  }));
+};
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const prevStep = () => setStep((prevStep) => prevStep - 1);
+  
   const handleSubmit =  async (e) => {
     e.preventDefault();
 
     try{
       
-      console.log(formData.dateOfResignation)
+      if (salary <= 0) {
+        Swal.fire({
+          title: "Error",
+          text: "Salary must be a positive number!",
+          icon: "error",
+        });
+        return;
+      }
      
       let res = await axios.post('http://localhost:5290/api/account/register-driver',
         {...formData,
@@ -194,61 +205,6 @@ const [salary,setSalary]=useState(0);
             </div>
             <div>
               <label
-                htmlFor="dateOfResignation"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Date of Resignation
-              </label>
-              <input
-                id="dateOfResignation"
-                name="dateOfResignation"
-                type="date"
-                value={formData.dateOfResignation}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="isActive"
-                className="flex items-center mt-9 cursor-pointer"
-              >
-                <div className="relative">
-                  <input
-                    id="isActive"
-                    name="isActive"
-                    type="checkbox"
-                    checked={formData.isActive}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                  <div
-                    className={`w-5 h-5 border-2 rounded transition-colors ${
-                      formData.isActive
-                        ? "bg-[#5664F5] border-blue-600"
-                        : "bg-white border-gray-300"
-                    }`}
-                  >
-                    {formData.isActive && (
-                      <svg
-                        className="w-3 h-3 text-white absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path d="M5 13l4 4L19 7"></path>
-                      </svg>
-                    )}
-                  </div>
-                </div>
-                <span className="ml-2 text-sm text-gray-900">Is Active</span>
-              </label>
-            </div>
-            <div>
-              <label
                 htmlFor="salary"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
@@ -264,12 +220,14 @@ const [salary,setSalary]=useState(0);
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
               />
             </div>
+            
+            
             <div>
               <label
                 htmlFor="department"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Licence Type
+                Department
               </label>
               <select
                 id="department"
@@ -345,6 +303,7 @@ const [salary,setSalary]=useState(0);
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
               />
             </div>
+            
           </div>
         );
       case 3:
@@ -401,6 +360,45 @@ const [salary,setSalary]=useState(0);
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
               />
             </div>
+            <div>
+              <label
+                htmlFor="isActive"
+                className="flex items-center mt-9 cursor-pointer"
+              >
+                <div className="relative">
+                  <input
+                    id="isActive"
+                    name="isActive"
+                    type="checkbox"
+                    checked={formData.isActive}
+                    onChange={handleChange}
+                    className="sr-only"
+                  />
+                  <div
+                    className={`w-5 h-5 border-2 rounded transition-colors ${
+                      formData.isActive
+                        ? "bg-[#5664F5] border-blue-600"
+                        : "bg-white border-gray-300"
+                    }`}
+                  >
+                    {formData.isActive && (
+                      <svg
+                        className="w-3 h-3 text-white absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    )}
+                  </div>
+                </div>
+                <span className="ml-2 text-sm text-gray-900">Is Active</span>
+              </label>
+            </div>
           </div>
         );
       default:
@@ -431,7 +429,15 @@ const [salary,setSalary]=useState(0);
               >
                 {i}
               </div>
-              <div className="mt-2">Step {i}</div>
+              {
+                i==1?(
+                  <div className="mt-2 font-bold">Personal Info</div>
+                ):i==2?(
+                  <div className="mt-2 font-bold">Additional Info</div>
+                ):(
+                  <div className="mt-2 font-bold">Account Info</div>
+                )
+              }
             </div>
           ))}
         </div>

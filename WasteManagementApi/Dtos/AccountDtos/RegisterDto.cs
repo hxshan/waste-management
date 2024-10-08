@@ -19,5 +19,6 @@ namespace WasteManagementApi.Dtos.AccountDtos
         public string PhoneNumber { get; set; }
         [Required]
         public string NIC { get; set; }
+        public string Address { get; set; }
     }
 }
