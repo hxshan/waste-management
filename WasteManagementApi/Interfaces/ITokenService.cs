@@ -1,4 +1,5 @@
-﻿using WasteManagementApi.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using WasteManagementApi.Models;
 
 namespace WasteManagementApi.Interfaces
 {

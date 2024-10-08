@@ -5,13 +5,19 @@ namespace WasteManagementApi.Dtos.AccountDtos
     public class RegisterDto
     {
         [Required]
-        public String? UserName { get; set; }
+        public string FirstName { get; set; }
 
+        public string? MiddleName { get; set; }
         [Required]
+        public string LastName { get; set; }
+
         [EmailAddress]
-        public String? Email { get; set; }
-
+        public string Email { get; set; }
         [Required]
-        public String? Password { get; set; }
+        public string Password { get; set; }
+        [Required]
+        public string PhoneNumber { get; set; }
+        [Required]
+        public string NIC { get; set; }
     }
 }

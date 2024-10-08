@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using WasteManagementApi.Interfaces;
 
 namespace WasteManagementApi.Models
 {
-    public class Driver : User
+    public class AdminStaff:User
     {
        
         public string? EmergencyContact { get; set; }
+
         public DateTime? DateOfHire { get; set; }
         public DateTime? DateOfResignation { get; set; }
 
@@ -19,8 +19,5 @@ namespace WasteManagementApi.Models
 
         public string? Department { get; set; }
 
-        public string LicenseNumber { get; set; }
-        public string LicenceType { get; set; }
-        public DateTime LicenceExpiration { get; set; }
     }
 }

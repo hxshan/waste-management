@@ -1,20 +1,19 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using WasteManagementApi.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace WasteManagementApi.Models
+namespace WasteManagementApi.Dtos.AccountDtos
 {
-    public class Driver : User
+    public class DriverRegisterDto:RegisterDto
     {
        
         public string? EmergencyContact { get; set; }
+
+        public string Address { get; set; }
+
         public DateTime? DateOfHire { get; set; }
         public DateTime? DateOfResignation { get; set; }
 
         public bool IsActive { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")]
         public decimal? Salary { get; set; }
 
         public string? Department { get; set; }

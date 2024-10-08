@@ -58,14 +58,20 @@ namespace WasteManagementApi.Migrations
                         new
                         {
                             Id = "66c9da02-c442-4559-83a8-63a287da0343",
-                            Name = "User",
-                            NormalizedName = "USER"
+                            Name = "Client",
+                            NormalizedName = "CLIENT"
                         },
                         new
                         {
                             Id = "71588004-3a06-4b9c-b033-45c62ffa98c1",
                             Name = "Driver",
                             NormalizedName = "DRIVER"
+                        },
+                        new
+                        {
+                            Id = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6",
+                            Name = "Helper",
+                            NormalizedName = "HELPER"
                         });
                 });
 
@@ -183,9 +189,18 @@ namespace WasteManagementApi.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -194,11 +209,27 @@ namespace WasteManagementApi.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NIC")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -212,6 +243,7 @@ namespace WasteManagementApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -238,6 +270,145 @@ namespace WasteManagementApi.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("User");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.AdminStaff", b =>
+                {
+                    b.HasBaseType("WasteManagementApi.Models.User");
+
+                    b.Property<DateTime?>("DateOfHire")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfResignation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Department")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmergencyContact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("Salary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.ToTable("AspNetUsers", t =>
+                        {
+                            t.Property("DateOfHire")
+                                .HasColumnName("AdminStaff_DateOfHire");
+
+                            t.Property("DateOfResignation")
+                                .HasColumnName("AdminStaff_DateOfResignation");
+
+                            t.Property("Department")
+                                .HasColumnName("AdminStaff_Department");
+
+                            t.Property("EmergencyContact")
+                                .HasColumnName("AdminStaff_EmergencyContact");
+
+                            t.Property("IsActive")
+                                .HasColumnName("AdminStaff_IsActive");
+
+                            t.Property("Salary")
+                                .HasColumnName("AdminStaff_Salary");
+                        });
+
+                    b.HasDiscriminator().HasValue("AdminStaff");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Client", b =>
+                {
+                    b.HasBaseType("WasteManagementApi.Models.User");
+
+                    b.HasDiscriminator().HasValue("Client");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Driver", b =>
+                {
+                    b.HasBaseType("WasteManagementApi.Models.User");
+
+                    b.Property<DateTime?>("DateOfHire")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfResignation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Department")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmergencyContact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LicenceExpiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LicenceType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LicenseNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Salary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.ToTable("AspNetUsers", t =>
+                        {
+                            t.Property("DateOfHire")
+                                .HasColumnName("Driver_DateOfHire");
+
+                            t.Property("DateOfResignation")
+                                .HasColumnName("Driver_DateOfResignation");
+
+                            t.Property("Department")
+                                .HasColumnName("Driver_Department");
+
+                            t.Property("EmergencyContact")
+                                .HasColumnName("Driver_EmergencyContact");
+
+                            t.Property("IsActive")
+                                .HasColumnName("Driver_IsActive");
+
+                            t.Property("Salary")
+                                .HasColumnName("Driver_Salary");
+                        });
+
+                    b.HasDiscriminator().HasValue("Driver");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.HelperStaff", b =>
+                {
+                    b.HasBaseType("WasteManagementApi.Models.User");
+
+                    b.Property<DateTime?>("DateOfHire")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfResignation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Department")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmergencyContact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("Salary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasDiscriminator().HasValue("HelperStaff");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

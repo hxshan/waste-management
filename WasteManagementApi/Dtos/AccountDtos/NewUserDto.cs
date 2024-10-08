@@ -2,9 +2,10 @@
 {
     public class NewUserDto
     {
-        public String UserName { get; set; }
-        public String Email { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
 
-        public String Token { get; set; }
+        public string Token { get; set; }
+        public string Role { get; set; }
     }
 }

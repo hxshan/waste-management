@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using WasteManagementApi.Dtos.AccountDtos;
 using WasteManagementApi.Interfaces;
+using WasteManagementApi.Mappers;
 using WasteManagementApi.Models;
 
 namespace WasteManagementApi.Controllers
@@ -44,7 +46,7 @@ namespace WasteManagementApi.Controllers
                 }
                 var appUser = new User
                 {
-                    UserName = registerDto.UserName,
+                    UserName = registerDto.FirstName,
                     Email = registerDto.Email
                 };
 
@@ -79,31 +81,31 @@ namespace WasteManagementApi.Controllers
         }
 
         [HttpPost("register-driver")]
-        public async Task<IActionResult> RegisterDriver([FromBody] RegisterDriverDto registerDriverDto)
+        public async Task<IActionResult> RegisterDriver([FromBody] DriverRegisterDto registerDto)
         {
             try
             {
-                if (!ModelState.IsValid) { return BadRequest(ModelState); }
-
-                var driver = new Driver
+                if (!ModelState.IsValid)
                 {
-                    UserName = registerDriverDto.FirstName + registerDriverDto.LastName,
-                    FirstName = registerDriverDto.FirstName,
-                    MiddleName = registerDriverDto.MiddleName,
-                    LastName = registerDriverDto.LastName,
-                    NIC = registerDriverDto.NIC,
-                    Email = registerDriverDto.Email
-                };
+                    return BadRequest(ModelState);
+                }
+                var driver = AccountMapper.MapDriverRegisterToDriver(registerDto);
 
-                //Create a new user
-                var CreatedUser = await _userManager.CreateAsync(driver, registerDriverDto.Password);
-                if (!CreatedUser.Succeeded){ return StatusCode(500, CreatedUser.Errors); }
+                var CreatedUser = await _userManager.CreateAsync(driver, registerDto.Password);
 
-                //add role to that new user
+                if (!CreatedUser.Succeeded)
+                {
+                    return StatusCode(500, CreatedUser.Errors);
+
+                }
+
                 var roleResult = await _userManager.AddToRoleAsync(driver, "Driver");
-                if (!roleResult.Succeeded) { return StatusCode(500, roleResult.Errors); }
 
+                if (!roleResult.Succeeded)
+                {
+                    return StatusCode(500, roleResult.Errors);
 
+                }
                 return Ok(new NewUserDto
                 {
                     UserName = driver.UserName,
@@ -111,18 +113,13 @@ namespace WasteManagementApi.Controllers
                     Token = await _tokenService.CreateToken(driver)
                 });
 
-
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.Message);
+                return StatusCode(500, e);
             }
 
         }
-
-
-        //[HttpPost("register-")] Note to Wajee register the normal user under some role idk 
-        
 
 
 
@@ -148,24 +145,19 @@ namespace WasteManagementApi.Controllers
             {
                 return Unauthorized("User not found/Password incorrect");
             }
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault();
+
             return Ok(new NewUserDto
             {
                 UserName = user.UserName,
                 Email = user.Email,
-                Token =  await _tokenService.CreateToken(user)
+                Token =  await _tokenService.CreateToken(user),
+                Role = role
             });
 
 
         }
-
-
-        [HttpGet]
-        [Authorize(Roles = "Driver")]
-        public IActionResult GetSomething() {
-            return Ok();
-            
-        }
-
 
     }
 }

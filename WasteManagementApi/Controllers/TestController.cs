@@ -12,7 +12,7 @@ namespace WasteManagementApi.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles ="User")]
+        [Authorize(Roles ="Driver")]
         public ActionResult Get() {
 
             return Ok("Authed");

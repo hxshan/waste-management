@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WasteManagementApi.Migrations
 {
     /// <inheritdoc />
-    public partial class roles : Migration
+    public partial class accounts : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,34 @@ namespace WasteManagementApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NIC = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
+                    AdminStaff_EmergencyContact = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AdminStaff_DateOfHire = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AdminStaff_DateOfResignation = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AdminStaff_IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    AdminStaff_Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    AdminStaff_Department = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Driver_EmergencyContact = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Driver_DateOfHire = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Driver_DateOfResignation = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Driver_IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    Driver_Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Driver_Department = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LicenseNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LicenceType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LicenceExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EmergencyContact = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfHire = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateOfResignation = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Department = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -40,7 +68,6 @@ namespace WasteManagementApi.Migrations
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -163,8 +190,9 @@ namespace WasteManagementApi.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "66c9da02-c442-4559-83a8-63a287da0343", null, "User", "USER" },
+                    { "66c9da02-c442-4559-83a8-63a287da0343", null, "Client", "CLIENT" },
                     { "71588004-3a06-4b9c-b033-45c62ffa98c1", null, "Driver", "DRIVER" },
+                    { "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6", null, "Helper", "HELPER" },
                     { "f7e8f3d0-308b-4751-b970-245527c2b7fb", null, "Admin", "ADMIN" }
                 });
 
