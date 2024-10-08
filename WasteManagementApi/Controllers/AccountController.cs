@@ -11,7 +11,7 @@ using WasteManagementApi.Models;
 
 namespace WasteManagementApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/account")]
     [ApiController]
     public class AccountController : ControllerBase
     {

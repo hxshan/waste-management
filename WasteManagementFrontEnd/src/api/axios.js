@@ -7,7 +7,7 @@ import axios from "axios";
  * 
  * To find port run the api and it shall be shown in the terminal 
  */
-const BASE_URL = "http://localhost:5224/api/";
+const BASE_URL = "http://localhost:5290/api/";
 
 
 export default axios.create({

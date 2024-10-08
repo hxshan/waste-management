@@ -9,7 +9,9 @@ namespace WasteManagementApi.Dtos.AccountDtos
 
         public string Address { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime? DateOfHire { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? DateOfResignation { get; set; }
 
         public bool IsActive { get; set; }
@@ -20,6 +22,8 @@ namespace WasteManagementApi.Dtos.AccountDtos
 
         public string LicenseNumber { get; set; }
         public string LicenceType { get; set; }
+        
+        [DataType(DataType.Date)]
         public DateTime LicenceExpiration { get; set; }
     }
 }
