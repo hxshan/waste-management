@@ -15,9 +15,12 @@ function App() {
       <div>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/client" element={<ClientDashboard />} />
           <Route path="/client-register" element={<ClientRegister />} />
 
+
+          <Route path="/admin" element={<AdminDashboard />} />
 
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin-driver-register" element={<DriverRegistration />} />
