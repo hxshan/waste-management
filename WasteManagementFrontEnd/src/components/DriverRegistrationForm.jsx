@@ -3,13 +3,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
-import axios from "axios";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2';
+
+
 
 const DriverRegistrationForm = () => {
-  const navigate = useNavigate()
   const navigate = useNavigate()
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -17,7 +14,6 @@ const DriverRegistrationForm = () => {
     lastName: "",
     middleName: "",
     phoneNumber: "",
-    nic: "",
     nic: "",
     emergencyContact: "",
     dateOfHire: "",
@@ -160,7 +156,6 @@ const handleChange = (e) => {
             <div>
               <label
                 htmlFor="nic"
-                htmlFor="nic"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
                 NIC Number
@@ -169,9 +164,7 @@ const handleChange = (e) => {
                 id="nic"
                 name="nic"
                 value={formData.nic}
-                id="nic"
-                name="nic"
-                value={formData.nic}
+
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
@@ -224,9 +217,7 @@ const handleChange = (e) => {
                 id="salary"
                 name="salary"
                 type="number"
-                step="0.01"
-                value={salary}
-                onChange={(e)=>{setSalary(Number(e.target.value))}}
+                step="0.1"
                 value={salary}
                 onChange={(e)=>{setSalary(Number(e.target.value))}}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
