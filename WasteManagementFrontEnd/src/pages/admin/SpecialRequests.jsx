@@ -33,34 +33,7 @@ const SpecialRequests = () => {
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-      {/* Top bar */}
-      <div className="w-full h-[60px] bg-white flex justify-between items-baseline px-5 pb-3">
-        <div className="p-4">
-          <h1 className="text-2xl font-bold text-green-600">EcoTrack</h1>
-        </div>
-
-        <div className="text-sm text-gray-600">User Name</div>
-      </div>
-
-      <div className="flex h-screen">
-        {/* Sidebar */}
-        <div className="w-64 bg-white shadow-md">
-          <nav className="mt-4">
-            {["Dashboard", "Requests", "Schedule", "Employees"].map(
-              (item, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className={`block py-2 px-4 text-gray-700 hover:bg-green-100 ${
-                    item === "Requests" ? "bg-green-500 text-white" : ""
-                  }`}
-                >
-                  {item}
-                </a>
-              )
-            )}
-          </nav>
-        </div>
+      
 
         {/* Main content */}
         <div className="flex-1 p-10">
@@ -171,7 +144,6 @@ const SpecialRequests = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
