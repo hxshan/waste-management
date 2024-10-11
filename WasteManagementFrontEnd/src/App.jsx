@@ -20,7 +20,7 @@ function App() {
           <Route path="/client-register" element={<ClientRegister />} />
 
 
-          <Route path="/admin" element={<AdminDashboard />} /> 
+          <Route path="/admin" element={<AdminDashboard />} />  
 
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin-driver-register" element={<DriverRegistration />} />
