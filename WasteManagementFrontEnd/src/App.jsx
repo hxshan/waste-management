@@ -9,8 +9,9 @@ import HelperRegistration from "./pages/admin/HelperRegistration";
 import SpecialRequests from "./pages/admin/SpecialRequests";
 import NavigationBar from "./pages/shared/NavigationBar";
 import Topbar from "./pages/shared/Topbar";
-import SpecialRequestForm from "./pages/admin/SpecialRequestForm";
+import SpecialRequestForm from "./pages/client/SpecialRequestForm";
 import ClientHome from "./pages/client/ClientHome";
+import AdminSpecialRequestForm from "./pages/admin/AdminSpecialRequestForm";
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
 
               <Route path="/client" element={<ClientDashboard />} />
               <Route path="/client-register" element={<ClientRegister />} />
+              <Route path="/client-new-special-requst" element= {<SpecialRequestForm/> }/>
 
               <Route path="/admin" element={<AdminDashboard />} />
 
@@ -50,7 +52,7 @@ function App() {
               />
               <Route
                 path="/new-special-request"
-                element={<SpecialRequestForm/>}
+                element={<AdminSpecialRequestForm />}
               />
             </Routes>
         </main>
