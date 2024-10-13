@@ -16,10 +16,35 @@ namespace WasteManagementApi.Repositories
         {
             _context = context;
         }
+
+        public async Task<Driver> GetDriverByIdAsync(string driverId)
+        {
+            var driver = await _context.Drivers.FirstOrDefaultAsync(x => x.Id == driverId);
+            return driver;
+        }
+
         public async Task<List<Driver>> GetDriversAsync()
         {
            var drivers=await _context.Drivers.ToListAsync();
            return drivers;
+        }
+
+        public async Task<Driver> UpdateDriverAsync(Driver driver)
+        {
+           var existingDriver = await GetDriverByIdAsync(driver.Id);
+
+           foreach(var prop in typeof(Driver).GetProperties()){
+
+                if(prop.Name == nameof(Driver)) continue;
+
+                if(prop.CanWrite){
+                    var newVal = prop.GetValue(driver);
+                    prop.SetValue(existingDriver,newVal);
+                }
+
+           }
+           await _context.SaveChangesAsync();
+           return existingDriver;
         }
     }
 }

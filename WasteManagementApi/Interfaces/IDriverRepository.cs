@@ -9,5 +9,9 @@ namespace WasteManagementApi.Interfaces
     public interface IDriverRepository
     {
         Task<List<Driver>> GetDriversAsync();
+        Task<Driver> GetDriverByIdAsync(string driverId);
+
+         Task<Driver> UpdateDriverAsync(Driver driver);
+
     }
 }
