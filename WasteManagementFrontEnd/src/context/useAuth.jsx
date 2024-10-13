@@ -19,11 +19,11 @@ export const UserProvider = ({ children }) =>{
         const token = localStorage.getItem("token");
 
         if(user && token){
-            SetUser(JSON.parse(user));
+            SetUser(JSON.parse(user));  
             SetToken(token);
             axios.defaults.headers.common["Authorization"] = "Bearer " + token;
         }
-        SetIsReady(true);
+        SetIsReady(true);   
     },[]);
 
     const register = async (userName,email,password) => {
@@ -69,7 +69,7 @@ export const UserProvider = ({ children }) =>{
                
             }else{
                 throw Error("Invalid Login")
-            }
+            }   
         }).catch((e)=>{
             toast.warning(e)
         })

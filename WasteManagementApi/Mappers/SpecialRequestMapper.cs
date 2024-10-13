@@ -6,11 +6,11 @@ namespace WasteManagementApi.Mappers
     public static class SpecialRequestMapper
     {
 
-        public static SpecialRequest MapDriverRegisterToDriver(SpecialRequestDto specialRequest)
+        public static SpecialRequest MapSpecialRequestDtoToSpecialRequest(SpecialRequestDto specialRequest)
         {
             return new SpecialRequest
             {
-                UserId = specialRequest.UserId,
+                ClientId = specialRequest.UserId,
                 ScheduleDate = specialRequest.ScheduleDate,
                 Location = specialRequest.Location,
                 WasteType = specialRequest.WasteType,
