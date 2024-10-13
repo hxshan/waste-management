@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const SpecialRequestForm = () => {
+const AdminSpecialRequestForm = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -29,6 +29,14 @@ const SpecialRequestForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+
+    Swal.fire({
+      title: "Good job!",
+      text: "You clicked the button!",
+      icon: "success"
+    }).then(() => {
+      navigate('/admin-special-request')
+    });
   };
 
   const cancel = () => {
@@ -226,4 +234,4 @@ const SpecialRequestForm = () => {
   );
 };
 
-export default SpecialRequestForm;
+export default AdminSpecialRequestForm;

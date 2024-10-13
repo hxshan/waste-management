@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using WasteManagementApi.Controllers;
 using WasteManagementApi.Data;
 using WasteManagementApi.Interfaces;
 using WasteManagementApi.Models;
 using WasteManagementApi.Repositories;
-using WasteManagementApi.Service;
+using WasteManagementApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,7 +93,10 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<ITruckRepository, TruckRepository>();
 
+
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 
 var app = builder.Build();

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { useState} from "react";
+import { Route, Routes, useLocation  } from "react-router-dom";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import ClientRegister from "./pages/client/ClientRegister";
 import DriverRegistration from "./pages/admin/DriverRegistration";
@@ -9,20 +9,31 @@ import HelperRegistration from "./pages/admin/HelperRegistration";
 import SpecialRequests from "./pages/admin/SpecialRequests";
 import NavigationBar from "./pages/shared/NavigationBar";
 import Topbar from "./pages/shared/Topbar";
-import SpecialRequestForm from "./pages/admin/SpecialRequestForm";
+import SpecialRequestForm from "./pages/client/SpecialRequestForm";
+import ClientHome from "./pages/client/ClientHome";
+import AdminSpecialRequestForm from "./pages/admin/AdminSpecialRequestForm";
 
 function App() {
+
+  const location = useLocation()
+  const isLoginPage = location.pathname === '/login'
+
+
   return (
     <div className="flex flex-col h-screen bg-slate-100">
-      <Topbar />
+      {/*{!isLoginPage && <Topbar />} */}
+      
       <div className="flex flex-1 overflow-hidden">
-        <NavigationBar />
-        <main className="flex-1 overflow-y-auto p-4 pt-8">
+        {/*{!isLoginPage && <NavigationBar />}*/}
+        <main className="flex-1 overflow-y-auto">
         <Routes>
+              <Route path="/" element= {<ClientHome />} />
               <Route path="/login" element={<Login />} />
               <Route path="/login" element={<Login />} />
+
               <Route path="/client" element={<ClientDashboard />} />
               <Route path="/client-register" element={<ClientRegister />} />
+              <Route path="/client-new-special-requst" element= {<SpecialRequestForm/> }/>
 
               <Route path="/admin" element={<AdminDashboard />} />
 
@@ -41,7 +52,7 @@ function App() {
               />
               <Route
                 path="/new-special-request"
-                element={<SpecialRequestForm/>}
+                element={<AdminSpecialRequestForm />}
               />
             </Routes>
         </main>

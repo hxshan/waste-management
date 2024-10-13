@@ -6,7 +6,7 @@ using System.Text;
 using WasteManagementApi.Interfaces;
 using WasteManagementApi.Models;
 
-namespace WasteManagementApi.Service
+namespace WasteManagementApi.Services
 {
     public class TokenService:ITokenService
     {
