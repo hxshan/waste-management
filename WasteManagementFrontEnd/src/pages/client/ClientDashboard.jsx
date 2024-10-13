@@ -1,11 +1,25 @@
-import React from 'react'
+import React from "react";
+import ClientNavigationBar from "../shared/ClientNavigationBar";
+import ClientFooter from "../shared/ClientFooter";
+import ClientRegisterForm from "../../components/ClientRegisterForm";
+import SpecialRequest from "../../components/Client/SpecialRequest";
 
 const ClientDashboard = () => {
   return (
     <div>
-        
-    </div>
-  )
-}
+      <div>
+        <ClientNavigationBar />
+      </div>
 
-export default ClientDashboard
+      <div className="my-8 bg-white">
+        <SpecialRequest />
+      </div>
+
+      <div>
+        <ClientFooter />
+      </div>
+    </div>
+  );
+};
+
+export default ClientDashboard;

@@ -7,9 +7,10 @@ namespace WasteManagementApi.Models
 {
     public class SpecialRequest:CollectionRequest
     {
-        public string WasteType { get; set; }
-        public string? Quantity { get; set; }
-        public string? Description { get; set; }
-
+        public String WasteType { get; set; }
+        public String? Quantity { get; set; }
+        public String? Description { get; set; }
+        public string ContactNo { get; internal set; }
+        public string SpecialInstructions { get; internal set; }
     }
 }
