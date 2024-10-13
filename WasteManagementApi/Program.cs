@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using WasteManagementApi.Data;
 using WasteManagementApi.Interfaces;
 using WasteManagementApi.Models;
+using WasteManagementApi.Repositories;
 using WasteManagementApi.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -86,7 +87,12 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+
+
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+
+
 
 var app = builder.Build();
 

@@ -7,11 +7,15 @@ namespace WasteManagementApi.Models
 {
     public class CollectionRequest
     {
-        public String requestId { get; set; }
-        public String UserId { get; set; }
+        public string Id { get; set; }
+        public string ClientId { get; set; }
+        public Client Client{get;set;}
         public DateTime ScheduleDate { get; set; }
-        public String Status { get; set; }
-        public String Location { get; set; }
+        public string Status { get; set; }
+        public string? Location { get; set; }
+        public float? LocationLongitude{get;set;}
+        public float? LocationLatitude{get;set;}
+        
 
     }
 }

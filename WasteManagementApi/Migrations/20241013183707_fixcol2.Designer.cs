@@ -12,8 +12,8 @@ using WasteManagementApi.Data;
 namespace WasteManagementApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241008220111_datechange")]
-    partial class datechange
+    [Migration("20241013183707_fixcol2")]
+    partial class fixcol2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace WasteManagementApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CollectionHelperStaff", b =>
+                {
+                    b.Property<int>("CollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HelperStaffId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CollectionId", "HelperStaffId");
+
+                    b.HasIndex("HelperStaffId");
+
+                    b.ToTable("CollectionHelperStaff");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -184,6 +199,139 @@ namespace WasteManagementApi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WasteManagementApi.Models.Bin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BinType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<float>("CurrentWasteLevel")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("MaxWasteCap")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Bins");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Collection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CollectionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CollectionRequestId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("DriverId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RequestId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TruckId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollectionRequestId");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("TruckId");
+
+                    b.ToTable("Collections");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.CollectionRequest", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float?>("LocationLatitude")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("LocationLongitude")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("ScheduleDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("CollectionRequests");
+
+                    b.HasDiscriminator().HasValue("CollectionRequest");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Truck", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("LicensePlate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TruckModel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Trucks");
+                });
+
             modelBuilder.Entity("WasteManagementApi.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -279,6 +427,35 @@ namespace WasteManagementApi.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("WasteManagementApi.Models.NormalRequest", b =>
+                {
+                    b.HasBaseType("WasteManagementApi.Models.CollectionRequest");
+
+                    b.Property<int>("BinId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("BinId");
+
+                    b.HasDiscriminator().HasValue("NormalRequest");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.SpecialRequest", b =>
+                {
+                    b.HasBaseType("WasteManagementApi.Models.CollectionRequest");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Quantity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WasteType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("SpecialRequest");
+                });
+
             modelBuilder.Entity("WasteManagementApi.Models.AdminStaff", b =>
                 {
                     b.HasBaseType("WasteManagementApi.Models.User");
@@ -329,6 +506,12 @@ namespace WasteManagementApi.Migrations
                 {
                     b.HasBaseType("WasteManagementApi.Models.User");
 
+                    b.Property<float?>("AddressLatitude")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("AddressLongitude")
+                        .HasColumnType("real");
+
                     b.HasDiscriminator().HasValue("Client");
                 });
 
@@ -336,11 +519,20 @@ namespace WasteManagementApi.Migrations
                 {
                     b.HasBaseType("WasteManagementApi.Models.User");
 
-                    b.Property<DateOnly?>("DateOfHire")
-                        .HasColumnType("date");
+                    b.Property<float>("AssignedAreaLat")
+                        .HasColumnType("real");
 
-                    b.Property<DateOnly?>("DateOfResignation")
-                        .HasColumnType("date");
+                    b.Property<float>("AssignedAreaLng")
+                        .HasColumnType("real");
+
+                    b.Property<float>("AssignedAreaRadius")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime?>("DateOfHire")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfResignation")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Department")
                         .HasColumnType("nvarchar(max)");
@@ -351,8 +543,8 @@ namespace WasteManagementApi.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<DateOnly>("LicenceExpiration")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("LicenceExpiration")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LicenceType")
                         .IsRequired()
@@ -364,6 +556,13 @@ namespace WasteManagementApi.Migrations
 
                     b.Property<decimal?>("Salary")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("TruckId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("TruckId")
+                        .IsUnique()
+                        .HasFilter("[TruckId] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", t =>
                         {
@@ -384,6 +583,9 @@ namespace WasteManagementApi.Migrations
 
                             t.Property("Salary")
                                 .HasColumnName("Driver_Salary");
+
+                            t.Property("TruckId")
+                                .HasColumnName("Driver_TruckId");
                         });
 
                     b.HasDiscriminator().HasValue("Driver");
@@ -411,7 +613,27 @@ namespace WasteManagementApi.Migrations
                     b.Property<decimal?>("Salary")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("TruckId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("TruckId");
+
                     b.HasDiscriminator().HasValue("HelperStaff");
+                });
+
+            modelBuilder.Entity("CollectionHelperStaff", b =>
+                {
+                    b.HasOne("WasteManagementApi.Models.Collection", null)
+                        .WithMany()
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WasteManagementApi.Models.HelperStaff", null)
+                        .WithMany()
+                        .HasForeignKey("HelperStaffId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -463,6 +685,106 @@ namespace WasteManagementApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Bin", b =>
+                {
+                    b.HasOne("WasteManagementApi.Models.Client", "Client")
+                        .WithMany("Bins")
+                        .HasForeignKey("ClientId");
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Collection", b =>
+                {
+                    b.HasOne("WasteManagementApi.Models.CollectionRequest", "CollectionRequest")
+                        .WithMany()
+                        .HasForeignKey("CollectionRequestId");
+
+                    b.HasOne("WasteManagementApi.Models.Driver", "Driver")
+                        .WithMany("Collections")
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WasteManagementApi.Models.Truck", "Truck")
+                        .WithMany("Collections")
+                        .HasForeignKey("TruckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CollectionRequest");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Truck");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.CollectionRequest", b =>
+                {
+                    b.HasOne("WasteManagementApi.Models.Client", "Client")
+                        .WithMany("CollectionRequests")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.NormalRequest", b =>
+                {
+                    b.HasOne("WasteManagementApi.Models.Bin", "Bin")
+                        .WithMany("CollectionRequests")
+                        .HasForeignKey("BinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bin");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Driver", b =>
+                {
+                    b.HasOne("WasteManagementApi.Models.Truck", "Truck")
+                        .WithOne("Driver")
+                        .HasForeignKey("WasteManagementApi.Models.Driver", "TruckId");
+
+                    b.Navigation("Truck");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.HelperStaff", b =>
+                {
+                    b.HasOne("WasteManagementApi.Models.Truck", "Truck")
+                        .WithMany("HelperStaff")
+                        .HasForeignKey("TruckId");
+
+                    b.Navigation("Truck");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Bin", b =>
+                {
+                    b.Navigation("CollectionRequests");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Truck", b =>
+                {
+                    b.Navigation("Collections");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("HelperStaff");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Client", b =>
+                {
+                    b.Navigation("Bins");
+
+                    b.Navigation("CollectionRequests");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Driver", b =>
+                {
+                    b.Navigation("Collections");
                 });
 #pragma warning restore 612, 618
         }
