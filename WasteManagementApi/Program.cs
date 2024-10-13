@@ -92,7 +92,9 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ITruckRepository, TruckRepository>();
+
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 
