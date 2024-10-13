@@ -12,20 +12,20 @@ namespace WasteManagementApi.Controllers
     public class SpecialRequestController : ControllerBase
     {
         private readonly ISpecialRequestRepository _repository;
-        private readonly Mappers _mapper;
 
-        public SpecialRequestController(ISpecialRequestRepository repository, Mappers mapper)
+
+        public SpecialRequestController(ISpecialRequestRepository repository)
         {
             _repository = repository;
-            _mapper = mapper;
+            
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateSpecialRequest(SpecialRequestDto specialRequestDto)
         {
-            var specialRequest = _mapper.Map<SpecialRequest>(specialRequestDto);
+            var specialRequest = SpecialRequestMapper.MapSpecialRequestDtoToSpecialRequest(specialRequestDto);
             var createdRequest = await _repository.CreateAsync(specialRequest);
-            return CreatedAtAction(nameof(GetSpecialRequest), new { id = createdRequest.requestId }, createdRequest);
+            return CreatedAtAction(nameof(GetSpecialRequest), new { id = createdRequest.Id }, createdRequest);
         }
 
         [HttpGet("{id}")]
