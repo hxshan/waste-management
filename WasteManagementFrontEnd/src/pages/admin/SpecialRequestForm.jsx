@@ -29,6 +29,14 @@ const SpecialRequestForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+
+    Swal.fire({
+      title: "Good job!",
+      text: "You clicked the button!",
+      icon: "success"
+    }).then(() => {
+      navigate('/admin-special-request')
+    });
   };
 
   const cancel = () => {

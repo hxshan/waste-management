@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { useState} from "react";
+import { Route, Routes, useLocation  } from "react-router-dom";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import ClientRegister from "./pages/client/ClientRegister";
 import DriverRegistration from "./pages/admin/DriverRegistration";
@@ -12,12 +12,18 @@ import Topbar from "./pages/shared/Topbar";
 import SpecialRequestForm from "./pages/admin/SpecialRequestForm";
 
 function App() {
+
+  const location = useLocation()
+  const isLoginPage = location.pathname === '/login'
+
+
   return (
     <div className="flex flex-col h-screen bg-slate-100">
-      <Topbar />
+      {!isLoginPage && <Topbar />}
+      
       <div className="flex flex-1 overflow-hidden">
-        <NavigationBar />
-        <main className="flex-1 overflow-y-auto p-4 pt-8">
+        {!isLoginPage && <NavigationBar />}
+        <main className="flex-1 overflow-y-auto">
         <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/login" element={<Login />} />
