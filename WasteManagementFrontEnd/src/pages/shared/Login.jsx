@@ -113,7 +113,7 @@ const Login = () => {
                 loginUser(userName, password);
               }}
               type="submit"
-              className="w-full text-black bg-gray-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6"
+              className="w-full text-black bg-gray-300 hover:bg-gray-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6"
             >
               Login
             </button>
