@@ -22,6 +22,21 @@ namespace WasteManagementApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CollectionHelperStaff", b =>
+                {
+                    b.Property<int>("CollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HelperStaffId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CollectionId", "HelperStaffId");
+
+                    b.HasIndex("HelperStaffId");
+
+                    b.ToTable("CollectionHelperStaff");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -211,7 +226,45 @@ namespace WasteManagementApi.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Bin");
+                    b.ToTable("Bins");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Collection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CollectionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CollectionRequestId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("DriverId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RequestId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TruckId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollectionRequestId");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("TruckId");
+
+                    b.ToTable("Collections");
                 });
 
             modelBuilder.Entity("WasteManagementApi.Models.CollectionRequest", b =>
@@ -248,7 +301,7 @@ namespace WasteManagementApi.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("CollectionRequest");
+                    b.ToTable("CollectionRequests");
 
                     b.HasDiscriminator().HasValue("CollectionRequest");
 
@@ -273,7 +326,7 @@ namespace WasteManagementApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Truck");
+                    b.ToTable("Trucks");
                 });
 
             modelBuilder.Entity("WasteManagementApi.Models.User", b =>
@@ -383,6 +436,23 @@ namespace WasteManagementApi.Migrations
                     b.HasDiscriminator().HasValue("NormalRequest");
                 });
 
+            modelBuilder.Entity("WasteManagementApi.Models.SpecialRequest", b =>
+                {
+                    b.HasBaseType("WasteManagementApi.Models.CollectionRequest");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Quantity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WasteType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("SpecialRequest");
+                });
+
             modelBuilder.Entity("WasteManagementApi.Models.AdminStaff", b =>
                 {
                     b.HasBaseType("WasteManagementApi.Models.User");
@@ -484,7 +554,7 @@ namespace WasteManagementApi.Migrations
                     b.Property<decimal?>("Salary")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("TruckId")
+                    b.Property<int?>("TruckId")
                         .HasColumnType("int");
 
                     b.HasIndex("TruckId")
@@ -548,6 +618,21 @@ namespace WasteManagementApi.Migrations
                     b.HasDiscriminator().HasValue("HelperStaff");
                 });
 
+            modelBuilder.Entity("CollectionHelperStaff", b =>
+                {
+                    b.HasOne("WasteManagementApi.Models.Collection", null)
+                        .WithMany()
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WasteManagementApi.Models.HelperStaff", null)
+                        .WithMany()
+                        .HasForeignKey("HelperStaffId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -608,6 +693,31 @@ namespace WasteManagementApi.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("WasteManagementApi.Models.Collection", b =>
+                {
+                    b.HasOne("WasteManagementApi.Models.CollectionRequest", "CollectionRequest")
+                        .WithMany()
+                        .HasForeignKey("CollectionRequestId");
+
+                    b.HasOne("WasteManagementApi.Models.Driver", "Driver")
+                        .WithMany("Collections")
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WasteManagementApi.Models.Truck", "Truck")
+                        .WithMany("Collections")
+                        .HasForeignKey("TruckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CollectionRequest");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Truck");
+                });
+
             modelBuilder.Entity("WasteManagementApi.Models.CollectionRequest", b =>
                 {
                     b.HasOne("WasteManagementApi.Models.Client", "Client")
@@ -634,9 +744,7 @@ namespace WasteManagementApi.Migrations
                 {
                     b.HasOne("WasteManagementApi.Models.Truck", "Truck")
                         .WithOne("Driver")
-                        .HasForeignKey("WasteManagementApi.Models.Driver", "TruckId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WasteManagementApi.Models.Driver", "TruckId");
 
                     b.Navigation("Truck");
                 });
@@ -657,8 +765,9 @@ namespace WasteManagementApi.Migrations
 
             modelBuilder.Entity("WasteManagementApi.Models.Truck", b =>
                 {
-                    b.Navigation("Driver")
-                        .IsRequired();
+                    b.Navigation("Collections");
+
+                    b.Navigation("Driver");
 
                     b.Navigation("HelperStaff");
                 });
@@ -668,6 +777,11 @@ namespace WasteManagementApi.Migrations
                     b.Navigation("Bins");
 
                     b.Navigation("CollectionRequests");
+                });
+
+            modelBuilder.Entity("WasteManagementApi.Models.Driver", b =>
+                {
+                    b.Navigation("Collections");
                 });
 #pragma warning restore 612, 618
         }

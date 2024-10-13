@@ -10,7 +10,8 @@ namespace WasteManagementApi.Models
         public int Id { get; set; }
         public string LicensePlate { get; set; }
         public string TruckModel { get; set; }
-        public Driver Driver { get; set; }
+        public Driver? Driver { get; set; }
         public ICollection<HelperStaff> HelperStaff { get; set; }
+         public ICollection<Collection> Collections { get; set; }
     }
 }

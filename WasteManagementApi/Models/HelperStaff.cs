@@ -19,6 +19,8 @@ namespace WasteManagementApi.Models
 
         public string? Department { get; set; }
         public int? TruckId {get;set;}
-        public Truck Truck {get;set;}
+        public Truck? Truck {get;set;}
+
+        public List<Collection>? Collections { get; set; } 
     }
 }

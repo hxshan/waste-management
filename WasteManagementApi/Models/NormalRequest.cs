@@ -8,6 +8,6 @@ namespace WasteManagementApi.Models
     public class NormalRequest: CollectionRequest
     {
         public int BinId{get;set;}
-        public Bin  Bin {get;set;}
+        public Bin Bin {get;set;}
     }
 }

@@ -9,13 +9,13 @@ namespace WasteManagementApi.Models
     {
         public int Id {get;set;}
         public int RequestId {get;set;}
-        public CollectionRequest CollectionRequest {get;set;}
+        public CollectionRequest? CollectionRequest {get;set;}
         public DateTime CollectionDate {get;set;} 
         public int TruckId {get;set;} 
+        public Truck Truck {get;set;}
         public bool Status {get;set;} 
-        public int DriverId {get;set;}
+        public string DriverId {get;set;}
         public Driver Driver {get;set;}    
-        public List<int> CrewMemberIds{get;set;}
-        public List<HelperStaff> CrewMembers{get;set;}
+        public List<HelperStaff>? CrewMembers{get;set;}
     }
 }

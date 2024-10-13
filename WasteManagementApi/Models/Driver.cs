@@ -19,10 +19,12 @@ namespace WasteManagementApi.Models
         public string LicenceType { get; set; }
         public DateTime LicenceExpiration { get; set; }
 
-        public int TruckId { get; set; }
-        public Truck Truck {get;set;}
+        public int? TruckId { get; set; }
+        public Truck? Truck {get;set;}
         public float AssignedAreaLat { get; set; }
         public float AssignedAreaLng { get; set; }
         public float AssignedAreaRadius { get; set; } 
+
+         public ICollection<Collection>? Collections { get; set; }
     }
 }
