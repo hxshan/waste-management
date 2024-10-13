@@ -41,13 +41,36 @@ namespace WasteManagementApi.Data
                 },
                 new IdentityRole
                 {
-                    Id = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6", 
+                    Id = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6",
                     Name = "Helper",
                     NormalizedName = "HELPER"
                 }
 
+
             };
             builder.Entity<IdentityRole>().HasData(roles);
+            
+            builder.Entity<Bin>()
+            .HasOne(b => b.Client)
+            .WithMany(c => c.Bins)
+            .HasForeignKey(b => b.ClientId);
+
+            builder.Entity<CollectionRequest>()
+            .HasOne(cr=>cr.Client)
+            .WithMany(c=>c.CollectionRequests)
+            .HasForeignKey(cr=>cr.ClientId);
+
+            builder.Entity<NormalRequest>()
+            .HasOne(cr=>cr.Bin)
+            .WithMany(b =>b.CollectionRequests)
+            .HasForeignKey(cr=>cr.BinId );
+
+            builder.Entity<Truck>()
+            .HasOne(t=>t.Driver)
+            .WithOne(d=>d.Truck)
+            .HasForeignKey<Driver>(x=>x.TruckId);
+
+        
 
         }
 

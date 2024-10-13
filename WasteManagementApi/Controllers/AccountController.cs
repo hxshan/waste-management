@@ -35,50 +35,50 @@ namespace WasteManagementApi.Controllers
          * 
          * User any other Endpoint named regiter-[something]
          */
-        [HttpPost("register")] 
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var appUser = new User
-                {
-                    UserName = registerDto.FirstName,
-                    Email = registerDto.Email
-                };
+        // [HttpPost("register")] 
+        // public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        // {
+        //     try
+        //     {
+        //         if (!ModelState.IsValid)
+        //         {
+        //             return BadRequest(ModelState);
+        //         }
+        //         var appUser = new User
+        //         {
+        //             UserName = registerDto.FirstName,
+        //             Email = registerDto.Email
+        //         };
 
-                var CreatedUser = await _userManager.CreateAsync(appUser, registerDto.Password);
+        //         var CreatedUser = await _userManager.CreateAsync(appUser, registerDto.Password);
 
-                if (!CreatedUser.Succeeded)
-                {
-                    return StatusCode(500, CreatedUser.Errors);
+        //         if (!CreatedUser.Succeeded)
+        //         {
+        //             return StatusCode(500, CreatedUser.Errors);
                     
-                }
+        //         }
 
-                var roleResult = await _userManager.AddToRoleAsync(appUser, "USER");
+        //         var roleResult = await _userManager.AddToRoleAsync(appUser, "USER");
 
-                if (!roleResult.Succeeded)
-                {
-                    return StatusCode(500, roleResult.Errors);
+        //         if (!roleResult.Succeeded)
+        //         {
+        //             return StatusCode(500, roleResult.Errors);
 
-                }
-                return Ok(new NewUserDto
-                {
-                    UserName = appUser.UserName,
-                    Email = appUser.Email,
-                    Token = await _tokenService.CreateToken(appUser)
-                });
+        //         }
+        //         return Ok(new NewUserDto
+        //         {
+        //             UserName = appUser.UserName,
+        //             Email = appUser.Email,
+        //             Token = await _tokenService.CreateToken(appUser)
+        //         });
 
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e);
-            }
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         return StatusCode(500, e);
+        //     }
 
-        }
+        // }
 
         [HttpPost("register-driver")]
         public async Task<IActionResult> RegisterDriver([FromBody] DriverRegisterDto registerDto)
@@ -164,6 +164,47 @@ namespace WasteManagementApi.Controllers
 
         }
 
+
+        [HttpPost("register-client")]
+        public async Task<IActionResult> RegisterClient([FromBody]  ClientRegisterDto registerDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid Data Format");
+                }
+                var client = AccountMapper.MapClientRegisterToClient(registerDto);
+
+                var CreatedUser = await _userManager.CreateAsync(client, registerDto.Password);
+
+                if (!CreatedUser.Succeeded)
+                {
+                    return StatusCode(500, CreatedUser.Errors);
+
+                }
+
+                var roleResult = await _userManager.AddToRoleAsync(client, "Client");
+
+                if (!roleResult.Succeeded)
+                {
+                    return StatusCode(500, roleResult.Errors);
+
+                }
+                return Ok(new NewUserDto
+                {
+                    UserName = client.UserName,
+                    Email = client.Email,
+                    Token = await _tokenService.CreateToken(client)
+                });
+
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+
+        }
 
 
         [HttpPost("login")]

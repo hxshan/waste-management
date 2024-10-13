@@ -30,7 +30,7 @@ namespace WasteManagementApi.Mappers
             };
 
         }
-         public static HelperStaff MapHelperRegisterToHelper(HelperRegisterDto registerDto)
+        public static HelperStaff MapHelperRegisterToHelper(HelperRegisterDto registerDto)
         {
             return new HelperStaff
             {
@@ -48,6 +48,24 @@ namespace WasteManagementApi.Mappers
                 IsActive = registerDto.IsActive,
                 Salary =  registerDto.Salary,
                 Department = registerDto.Department,
+            };
+
+        }
+        public static Client MapClientRegisterToClient(ClientRegisterDto registerDto)
+        {
+            return new Client
+            {
+                UserName = registerDto.FirstName + registerDto.LastName,
+                Email = registerDto.Email,
+                FirstName = registerDto.FirstName,
+                MiddleName = registerDto.MiddleName,
+                LastName = registerDto.LastName,
+                NIC = registerDto.NIC,
+                Address = registerDto.Address,
+                AddressLatitude = registerDto.AddressLatitude,
+                AddressLongitude = registerDto.AddressLongitude,
+                PhoneNumber = registerDto.PhoneNumber,
+               
             };
 
         }
