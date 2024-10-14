@@ -168,8 +168,10 @@ namespace WasteManagementApi.Controllers
         [HttpPost("register-client")]
         public async Task<IActionResult> RegisterClient([FromBody]  ClientRegisterDto registerDto)
         {
+           
             try
             {
+                Console.Write(registerDto);
                 if (!ModelState.IsValid)
                 {
                     return BadRequest("Invalid Data Format");

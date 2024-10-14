@@ -7,6 +7,7 @@ namespace WasteManagementApi.Interfaces
     public interface ISpecialRequestRepository
     {
         Task<SpecialRequest> CreateAsync(SpecialRequest specialRequest);
+        Task<IEnumerable<SpecialRequest>> GetByUserIdAsync(string userId);
         Task<SpecialRequest> GetByIdAsync(string id);
         Task<IEnumerable<SpecialRequest>> GetAllAsync();
         Task<SpecialRequest> UpdateAsync(SpecialRequest specialRequest);
