@@ -95,7 +95,7 @@ namespace WasteManagementApi.Controllers
 
                 if (!CreatedUser.Succeeded)
                 {
-                    return StatusCode(500, CreatedUser.Errors);
+                    return Problem("Error When Creating the User");
 
                 }
 
@@ -103,7 +103,7 @@ namespace WasteManagementApi.Controllers
 
                 if (!roleResult.Succeeded)
                 {
-                    return StatusCode(500, roleResult.Errors);
+                    return Problem("Error When Assigning the User their Role");
 
                 }
                 return Ok(new NewUserDto
@@ -116,7 +116,7 @@ namespace WasteManagementApi.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e);
+                return StatusCode(500, e.Message);
             }
 
         }

@@ -61,6 +61,7 @@ namespace WasteManagementApi.Tests.Controller
                 AssignedAreaLng = -74.0060F,
                 AssignedAreaRadius = 10.5F,
                 Collections = new List<Collection>()
+
             },
             new Driver
             {

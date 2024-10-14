@@ -25,7 +25,7 @@ namespace WasteManagementApi.Repositories
 
         public async Task<Client> GetClientByIdAsync(String id)
         {
-            return await _context.Users.OfType<Client>().FirstOrDefaultAsync(u => u.Id ==id);
+            return await _context.Users.OfType<Client>().FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<Client> UpdateClientAsync(String id,ClientUpdateDto clientDto)
