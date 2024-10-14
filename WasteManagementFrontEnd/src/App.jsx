@@ -17,6 +17,7 @@ import BinRegistration from "./pages/admin/BinRegisterForm";
 import BinList from "./pages/admin/BinList";
 import BinRequestForm from "./pages/client/BinRequestForm.jsx";
 import BinRequestList from "./pages/admin/BinRequestlist.jsx";
+import EditBin from "./pages/admin/updatebindetails.jsx"
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
               
               <Route path="/bin-registraion" element={<BinRegistration />} />
               <Route path="/binlist" element={<BinList />} />
+              <Route path="/edit-bin/:id" element={<EditBin />} />
               <Route path="/bin-requestform" element={<BinRequestForm />} />
               <Route path="/bin-requestlist" element={<BinRequestList />} />
 

@@ -1,169 +1,111 @@
-// import React, { useState } from 'react';
-// import { Search } from 'lucide-react';
-
-// const GarbageBinManagement = () => {
-//   const [searchTerm, setSearchTerm] = useState('');
-
-//   const bins = [
-//     { id: 'ER1245', clientId: 'YUd45152', client: 'W.T.M. Kariyawasam', location: 'Colombo', maxWasteCap: 5, currentWasteLevel: 5, status: 'Full', binType: 'Plastic' },
-//     { id: 'HK545', clientId: 'HGd45552', client: 'K.H. Sugathapala', location: 'Gampaha', maxWasteCap: 4, currentWasteLevel: 1, status: 'No', binType: 'Plastic' },
-//     { id: 'YR1245', clientId: 'GFG74663', client: 'T.M. Jayakodi', location: 'Colombo', maxWasteCap: 2, currentWasteLevel: 2, status: 'Full', binType: 'Rubber' },
-//   ];
-
-//   return (
-//     <div className="p-6 max-w-6xl mx-auto">
-//       <div className="flex justify-between items-center mb-6">
-//         <h1 className="text-2xl font-bold">Registered Bins List</h1>
-//         <div className="relative">
-//           <input
-//             type="text"
-//             placeholder="Search Here"
-//             className="pl-3 pr-10 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-100"
-//             value={searchTerm}
-//             onChange={(e) => setSearchTerm(e.target.value)}
-//           />
-//           <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-//         </div>
-//       </div>
-//       <div className="overflow-x-auto bg-white rounded-lg shadow">
-//         <table className="w-full table-auto">
-//           <thead>
-//             <tr className="bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-//               <th className="px-4 py-3">ID</th>
-//               <th className="px-4 py-3">Client ID</th>
-//               <th className="px-4 py-3">Client</th>
-//               <th className="px-4 py-3">Location</th>
-//               <th className="px-4 py-3">Max Waste Cap</th>
-//               <th className="px-4 py-3">Current Waste Level</th>
-//               <th className="px-4 py-3">Status</th>
-//               <th className="px-4 py-3">Bin Type</th>
-//               <th className="px-4 py-3">Actions</th>
-//             </tr>
-//           </thead>
-//           <tbody className="text-gray-600 text-sm">
-//             {bins.map((bin) => (
-//               <tr key={bin.id} className="border-b border-gray-200 hover:bg-gray-100">
-//                 <td className="px-4 py-3">{bin.id}</td>
-//                 <td className="px-4 py-3">{bin.clientId}</td>
-//                 <td className="px-4 py-3">{bin.client}</td>
-//                 <td className="px-4 py-3">{bin.location}</td>
-//                 <td className="px-4 py-3">{bin.maxWasteCap}</td>
-//                 <td className="px-4 py-3">{bin.currentWasteLevel}</td>
-//                 <td className="px-4 py-3">
-//                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-//                     bin.status === 'Full' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-//                   }`}>
-//                     {bin.status}
-//                   </span>
-//                 </td>
-//                 <td className="px-4 py-3">{bin.binType}</td>
-//                 <td className="px-4 py-3">
-//                   <button className="text-red-600 hover:text-red-900 mr-2">
-//                     <span className="sr-only">Delete</span>
-//                     🗑️
-//                   </button>
-//                   <button className="text-blue-600 hover:text-blue-900">
-//                     <span className="sr-only">Edit</span>
-//                     ✏️
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default GarbageBinManagement;
-
 import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
-const GarbageBinManagement = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+const BinList = () => {
   const [bins, setBins] = useState([]);
 
+  const navigate = useNavigate();
+
   // Fetch bins from the API
-  const fetchBins = async () => {
+  const getData = async () => {
     try {
-      const response = await axios.get('/api/bin'); // Adjust this URL if necessary
+      const response = await axios.get(`http://localhost:5290/api/Bins`); // Adjust this URL if necessary
       setBins(response.data);
     } catch (error) {
       console.error('Error fetching bins:', error);
     }
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete") === true) {
+      try {
+        const result = await axios.delete(`http://localhost:5290/api/Bins/${id}`);
+        if (result.status === 200) {
+          toast.success("Bin has been deleted");
+          getData();
+        }
+      } catch (error) {
+        toast.error("Failed to delete the bin");
+      }
+    }
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/edit-bin/${id}`);
+  };
+
   useEffect(() => {
-    fetchBins();
+    getData();
   }, []);
 
-  // Filter bins based on the search term
-  const filteredBins = bins.filter(bin =>
-    bin.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    bin.clientId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    bin.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    bin.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    bin.binType.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
+    
+
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Registered Bins List</h1>
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search Here"
-            className="pl-3 pr-10 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-100"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-        </div>
+        
+        <div className="flex justify-between w-full max-w-5xl mb-4">
+        <button
+          //onClick={generateReport}
+          className="p-2 bg-orange-500 text-white rounded"
+        >
+          Generate Report
+        </button>
+        <h1 className="text-2xl font-bold mb-4">Registered Bins List</h1>
+        <button
+          onClick={() => navigate('/bin-registraion')}
+          className="p-2 bg-green-500 text-white rounded"
+        >
+          Add New Bin
+        </button>
+      </div>
       </div>
       <div className="overflow-x-auto bg-white rounded-lg shadow">
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-              <th className="px-4 py-3">ID</th>
-              <th className="px-4 py-3">Client ID</th>
-              <th className="px-4 py-3">Client</th>
-              <th className="px-4 py-3">Location</th>
-              <th className="px-4 py-3">Max Waste Cap</th>
-              <th className="px-4 py-3">Current Waste Level</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Bin Type</th>
-              <th className="px-4 py-3">Actions</th>
+              <th className="border border-gray-300 p-2">#</th>
+              <th className="border border-gray-300 p-2">Client ID</th>
+              <th className="border border-gray-300 p-2">Location</th>
+              <th className="border border-gray-300 p-2">Max Waste Cap</th>
+              <th className="border border-gray-300 p-2">Current Waste Level</th>
+              <th className="border border-gray-300 p-2">Status</th>
+              <th className="border border-gray-300 p-2">Bin Type</th>
+              <th className="border border-gray-300 p-2">Actions</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm">
-            {filteredBins.map((bin) => (
+            {bins.map((bin, index) => (
               <tr key={bin.id} className="border-b border-gray-200 hover:bg-gray-100">
-                <td className="px-4 py-3">{bin.id}</td>
-                <td className="px-4 py-3">{bin.clientId}</td>
-                <td className="px-4 py-3">{bin.client}</td>
-                <td className="px-4 py-3">{bin.location}</td>
-                <td className="px-4 py-3">{bin.maxWasteCap}</td>
-                <td className="px-4 py-3">{bin.currentWasteLevel}</td>
-                <td className="px-4 py-3">
+                <td className="border border-gray-300 p-2">{index + 1}</td>
+                <td className="border border-gray-300 p-2">{bin.clientId}</td>
+                <td className="border border-gray-300 p-2">{bin.location}</td>
+                <td className="border border-gray-300 p-2">{bin.maxWasteCap}</td>
+                <td className="border border-gray-300 p-2">{bin.currentWasteLevel}</td>
+                <td className="border border-gray-300 p-2">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                     bin.status === 'Full' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
                   }`}>
                     {bin.status}
                   </span>
                 </td>
-                <td className="px-4 py-3">{bin.binType}</td>
-                <td className="px-4 py-3">
-                  <button className="text-red-600 hover:text-red-900 mr-2">
-                    <span className="sr-only">Delete</span>
-                    🗑️
-                  </button>
-                  <button className="text-blue-600 hover:text-blue-900">
+                <td className="border border-gray-300 p-2">{bin.binType}</td>
+                <td className="border border-gray-300 p-2">
+                  <button 
+                    onClick={() => handleEdit(bin.id)}
+                    className="text-red-600 hover:text-red-900 mr-2">
                     <span className="sr-only">Edit</span>
                     ✏️
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(bin.id)}
+                    className="text-blue-600 hover:text-blue-900">
+                    <span className="sr-only">Delete</span>
+                    🗑️
                   </button>
                 </td>
               </tr>
@@ -171,8 +113,9 @@ const GarbageBinManagement = () => {
           </tbody>
         </table>
       </div>
+      <ToastContainer />
     </div>
   );
 };
 
-export default GarbageBinManagement;
+export default BinList;
