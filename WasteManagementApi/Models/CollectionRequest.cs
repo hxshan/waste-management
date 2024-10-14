@@ -9,7 +9,7 @@ namespace WasteManagementApi.Models
     {
         public int Id { get; set; }
         public string ClientId { get; set; }
-        public Client Client{get;set;}
+        public Client? Client{get;set;}
         public DateTime ScheduleDate { get; set; }
         public string Status { get; set; }
         public string? Location { get; set; }

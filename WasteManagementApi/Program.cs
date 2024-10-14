@@ -94,6 +94,8 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ITruckRepository, TruckRepository>();
+builder.Services.AddScoped<IBinRepository, BinRepository>();
+builder.Services.AddScoped<ISpecialRequestRepository, SpecialRequestRepository>();
 builder.Services.AddScoped<IHelperRepository, HelperRepository>();
 builder.Services.AddScoped<INormalRequestRepository, NormalRequestRepository>();
 

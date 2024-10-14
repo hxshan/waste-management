@@ -4,6 +4,7 @@ using WasteManagementApi.Models;
 using WasteManagementApi.Mappers;
 using WasteManagementApi.Interfaces;
 using WasteManagementApi.Dtos.CollectionDtos;
+using System.Security.Claims;
 
 namespace WasteManagementApi.Controllers
 {
@@ -17,21 +18,46 @@ namespace WasteManagementApi.Controllers
         public SpecialRequestController(ISpecialRequestRepository repository)
         {
             _repository = repository;
-            
+
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateSpecialRequest(SpecialRequestDto specialRequestDto)
         {
-            var specialRequest = SpecialRequestMapper.MapSpecialRequestDtoToSpecialRequest(specialRequestDto);
-            var createdRequest = await _repository.CreateAsync(specialRequest);
-            return CreatedAtAction(nameof(GetSpecialRequest), new { id = createdRequest.Id }, createdRequest);
+            
+                var specialRequest = SpecialRequestMapper.MapSpecialRequestDtoToSpecialRequest(specialRequestDto);
+                var createdRequest = await _repository.CreateAsync(specialRequest);
+                return CreatedAtAction(nameof(GetSpecialRequest), new { id = createdRequest.Id }, createdRequest);
+            
+            
+
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetSpecialRequest(string id)
+
+
+        [HttpGet("/user/{clientId}")]
+        public async Task<IActionResult> GetUserSpecialRequests(string clientId)
         {
-            var specialRequest = await _repository.GetByIdAsync(id);
+            try
+            {
+
+                var specialRequests = await _repository.GetByUserIdAsync(clientId);
+                return Ok(specialRequests);
+            }
+            catch (Exception e)
+            {
+                return Problem("Error in Retriving Client Special Requests");
+            }
+
+
+
+
+        }
+
+        [HttpGet("/{requestId}")]
+        public async Task<IActionResult> GetSpecialRequest(string requestId)
+        {
+            var specialRequest = await _repository.GetByIdAsync(requestId);
             if (specialRequest == null)
             {
                 return NotFound();
