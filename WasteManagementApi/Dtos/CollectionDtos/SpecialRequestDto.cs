@@ -11,7 +11,6 @@ namespace WasteManagementApi.Dtos.CollectionDtos
         public string Description { get; set; }
         public string ContactNo { get; set; }
         public string SpecialInstructions { get; set; }
-        public bool Immediate { get; set; }
     }
 
 }

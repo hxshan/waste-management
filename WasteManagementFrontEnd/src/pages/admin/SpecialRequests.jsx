@@ -84,27 +84,11 @@ const SpecialRequests = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="flex flex-col h-full bg-gray-100 ">
-      {/* Main content */}
-      <div className="flex-1 p-10">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold">Special Requests</h2>
-        </div>
+    <div className="flex flex-col h-full bg-gray-100 p-6">
+      <h2 className="text-2xl font-semibold mb-6">Special Requests</h2>
 
-        <div className="mb-4 flex justify-between">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search"
-              className="pl-10 pr-4 py-2 border rounded-md"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1); // Reset to first page on search
-              }}
-            />
-            <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-          </div>
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex justify-between items-center mb-4">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-md flex items-center"
             onClick={() => navigator("/new-special-request")}
@@ -112,88 +96,74 @@ const SpecialRequests = () => {
             <Plus className="mr-2" size={20} />
             Add Request
           </button>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search Here"
+              className="pl-4 pr-10 py-2 border rounded-full w-64"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
+          </div>
         </div>
 
-        <table className="w-full bg-white shadow-md rounded-lg overflow-hidden">
-          <thead className="bg-gray-100">
-            <tr>
-              {[
-                "ID",
-                "Customer",
-                "Description",
-                "Location",
-                "Status",
-                "Schedule",
-              ].map((header) => (
-                <th
-                  key={header}
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  {header}
-                </th>
-              ))}
+        <table className="w-full">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="px-4 py-2 text-left">ID</th>
+              <th className="px-4 py-2 text-left">Customer</th>
+              <th className="px-4 py-2 text-left">Description</th>
+              <th className="px-4 py-2 text-left">Location</th>
+              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 text-left">Schedule</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
-            {currentItems.length == 0 ? (
-              <tr>
-                <td
-                  colSpan="6"
-                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"
-                >
-                  No requests found
-                </td>
+          <tbody>
+            {currentItems.map((row, index) => (
+              <tr key={row.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                <td className="px-4 py-2">{row.id}</td>
+                <td className="px-4 py-2">{row.customer}</td>
+                <td className="px-4 py-2">{row.description}</td>
+                <td className="px-4 py-2">{row.location}</td>
+                <td className="px-4 py-2">{row.status}</td>
+                <td className="px-4 py-2">{row.schedule}</td>
               </tr>
-            ) : (
-              currentItems.map((row) => (
-                <tr key={row.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {row.customer}
-                  </td>
-                  <td className="px-6 py-4">{row.description}</td>
-                  <td className="px-6 py-4">{row.location}</td>
-                  <td className="px-6 py-4">{row.status}</td>
-                  <td className="px-6 py-4">{row.schedule}</td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
 
-        <div className="mt-4 flex justify-center">
-          <nav
-            className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-            aria-label="Pagination"
+        <div className="mt-4 flex justify-center items-center">
+          <button
+            onClick={() => paginate(Math.max(1, currentPage - 1))}
+            className="mr-2 px-2 py-1 rounded-full bg-gray-200 hover:bg-gray-300"
+            disabled={currentPage === 1}
           >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          {[...Array(totalPages).keys()].map((number) => (
             <button
-              onClick={() => paginate(Math.max(1, currentPage - 1))}
-              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+              key={number + 1}
+              onClick={() => paginate(number + 1)}
+              className={`mx-1 px-3 py-1 rounded-full ${
+                number + 1 === currentPage
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
             >
-              <span className="sr-only">Previous</span>
-              <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+              {number + 1}
             </button>
-            {[...Array(totalPages).keys()].map((number) => (
-              <button
-                key={number + 1}
-                onClick={() => paginate(number + 1)}
-                className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                  number + 1 === currentPage
-                    ? "z-10 bg-green-50 border-green-500 text-green-600"
-                    : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
-                }`}
-              >
-                {number + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
-              className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-            >
-              <span className="sr-only">Next</span>
-              <ChevronRight className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </nav>
+          ))}
+          <button
+            onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
+            className="ml-2 px-2 py-1 rounded-full bg-gray-200 hover:bg-gray-300"
+            disabled={currentPage === totalPages}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </div>

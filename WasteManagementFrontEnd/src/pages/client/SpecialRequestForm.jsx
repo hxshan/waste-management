@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import ClientFooter from "../shared/ClientFooter";
 import ClientNavigationBar from "../shared/ClientNavigationBar";
+import axios from "../../api/axios";
 
 const SpecialRequestForm = () => {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState(""); // Assume we get this from a login context or state
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    // Here you would typically fetch the logged-in user's ID
-    // For now, we'll just simulate it
-    setUserId("logged-in-user-id");
+
+    setUserId("0001d9cc-6075-4935-8e1e-fed4cbf307db");
   }, []);
 
   const [formData, setFormData] = useState({
@@ -51,15 +51,11 @@ const SpecialRequestForm = () => {
         date: formData.immediate ? new Date().toISOString() : formData.date,
       };
 
-      const response = await fetch("/api/SpecialRequest", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(submissionData),
+      const response = await axios.post("/special-request/", {
+        ...submissionData
       });
 
-      if (response.ok) {
+      if (response.status) {
         Swal.fire({
           title: "Success!",
           text: "Special request submitted successfully!",
@@ -67,9 +63,7 @@ const SpecialRequestForm = () => {
         }).then(() => {
           navigate("/admin-special-request");
         });
-      } else {
-        throw new Error("Failed to submit special request");
-      }
+      } 
     } catch (error) {
       Swal.fire({
         title: "Error!",
@@ -197,7 +191,6 @@ const SpecialRequestForm = () => {
                 onChange={handleChange}
                 placeholder="Enter quantity (optional)"
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
 
