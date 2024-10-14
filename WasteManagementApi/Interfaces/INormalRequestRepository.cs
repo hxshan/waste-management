@@ -9,5 +9,6 @@ namespace WasteManagementApi.Interfaces
     public interface INormalRequestRepository
     {
         Task<NormalRequest> CreateNormalRequest(NormalRequest normalRequest);
+        Task<List<NormalRequest>> GetRequestsByClientId(string clientId);
     }
 }
