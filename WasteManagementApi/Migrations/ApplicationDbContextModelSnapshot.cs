@@ -240,8 +240,8 @@ namespace WasteManagementApi.Migrations
                     b.Property<DateTime>("CollectionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CollectionRequestId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("CollectionRequestId")
+                        .HasColumnType("int");
 
                     b.Property<string>("DriverId")
                         .IsRequired()
@@ -269,8 +269,11 @@ namespace WasteManagementApi.Migrations
 
             modelBuilder.Entity("WasteManagementApi.Models.CollectionRequest", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClientId")
                         .IsRequired()
@@ -428,8 +431,12 @@ namespace WasteManagementApi.Migrations
                 {
                     b.HasBaseType("WasteManagementApi.Models.CollectionRequest");
 
-                    b.Property<int>("BinId")
+                    b.Property<int?>("BinId")
                         .HasColumnType("int");
+
+                    b.Property<string>("WasteType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("BinId");
 
@@ -457,6 +464,12 @@ namespace WasteManagementApi.Migrations
                     b.Property<string>("WasteType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("CollectionRequests", t =>
+                        {
+                            t.Property("WasteType")
+                                .HasColumnName("SpecialRequest_WasteType");
+                        });
 
                     b.HasDiscriminator().HasValue("SpecialRequest");
                 });
@@ -741,9 +754,7 @@ namespace WasteManagementApi.Migrations
                 {
                     b.HasOne("WasteManagementApi.Models.Bin", "Bin")
                         .WithMany("CollectionRequests")
-                        .HasForeignKey("BinId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BinId");
 
                     b.Navigation("Bin");
                 });

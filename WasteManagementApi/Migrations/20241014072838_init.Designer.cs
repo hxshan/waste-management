@@ -12,8 +12,8 @@ using WasteManagementApi.Data;
 namespace WasteManagementApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241013221256_specreq")]
-    partial class specreq
+    [Migration("20241014072838_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
