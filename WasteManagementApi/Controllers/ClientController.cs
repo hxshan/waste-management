@@ -78,7 +78,7 @@ namespace WasteManagementApi.Controllers
                 Status="pending",
                 BinId=requestDto.BinId
             };
-            
+
             await _normalReqRepo.CreateNormalRequest(collectionRequest);
             return Ok("Request Created Successfully");
 
