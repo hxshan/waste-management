@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // Card component for individual special request
-const SpecialRequestCard = ({ data }) => {
+const SpecialRequestClientCard = ({ data }) => {
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
       case "pending":
@@ -42,19 +42,19 @@ const SpecialRequestCard = ({ data }) => {
   );
 };
 
-// Main SpecialRequest component
-const SpecialRequest = () => {
-  const [specialRequests, setSpecialRequests] = useState([]);
+// Main SpecialRequestClient component
+const SpecialRequestClient = () => {
+  const [SpecialRequestClients, setSpecialRequestClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchSpecialRequests = async () => {
+    const fetchSpecialRequestClients = async () => {
       try {
         // Replace with your actual API endpoint
         const response = await axios.get(`/api/special-request/user/${"0001d9cc-6075-4935-8e1e-fed4cbf307db"}`);
         console.log(response.data); 
-        setSpecialRequests(response.data); 
+        setSpecialRequestClients(response.data); 
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch special requests");
@@ -62,21 +62,21 @@ const SpecialRequest = () => {
       }
     };
 
-    fetchSpecialRequests();
+    fetchSpecialRequestClients();
   }, []);
 
   if (loading) return <div className="text-center mt-10">Loading...</div>;
   if (error) return <div className="text-center mt-10 text-red-500">{error}</div>;
 
   return (
-    <div className="flex justify-center bg-white min-h-screen py-10">
+    <div className="flex justify-center bg-white h-screen py-10">
       <div className="w-3/4">
         <div className="bg-white flex flex-col items-center p-6 rounded-lg shadow-lg">
           <h1 className="text-3xl font-bold mb-10 text-gray-800">Special Collection Status</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-            {Array.isArray(specialRequests) && specialRequests.length > 0 ? (
-              specialRequests.map((item) => (
-                <SpecialRequestCard key={item.id} data={item} />
+            {Array.isArray(SpecialRequestClients) && SpecialRequestClients.length > 0 ? (
+              SpecialRequestClients.map((item) => (
+                <SpecialRequestClientCard key={item.id} data={item} />
               ))
             ) : (
               <div>No special requests available</div>
@@ -88,4 +88,4 @@ const SpecialRequest = () => {
   );
 };
 
-export default SpecialRequest;
+export default SpecialRequestClient;
