@@ -18,6 +18,7 @@ import BinList from "./pages/admin/BinList";
 import BinRequestForm from "./pages/client/BinRequestForm.jsx";
 import BinRequestList from "./pages/admin/BinRequestlist.jsx";
 import ClientAllSpecialRequests from "./pages/client/ClientAllSpecialRequests.jsx";
+import SpecialRequestDetailAdmin from "./pages/admin/SpecialRequestDetailAdmin.jsx";
 
 function App() {
   const location = useLocation();
@@ -73,6 +74,11 @@ function App() {
             <Route
               path="/new-special-request"
               element={<AdminSpecialRequestForm />}
+            />
+
+<Route
+              path="/special-request-page/:id"
+              element={<SpecialRequestDetailAdmin />}
             />
           </Routes>
         </main>

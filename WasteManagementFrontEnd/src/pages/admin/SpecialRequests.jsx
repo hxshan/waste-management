@@ -11,6 +11,8 @@ const SpecialRequests = () => {
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 5;
 
+  const navigate = useNavigate()
+
   // Fetch data from API
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +50,10 @@ const SpecialRequests = () => {
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleScheduleClick = (id) => {
+    navigate(`/special-request-page/${id}`);
+  };
 
   return (
     <div className="flex flex-col h-full bg-gray-100 p-6">
@@ -109,7 +115,8 @@ const SpecialRequests = () => {
                   </td>
                   <td className="px-4 py-2">{row.status}</td>
                   <td className="px-4 py-2 align-center">
-                    <button className="border-green-600 border-2 px-4 rounded-md flex items-center hover:bg-green-600 hover:text-white">
+                    <button className="border-green-600 border-2 px-4 rounded-md flex items-center hover:bg-green-600 hover:text-white"
+                    onClick={() => handleScheduleClick(row.id)}>
                       Schedule
                     </button>
                   </td>
