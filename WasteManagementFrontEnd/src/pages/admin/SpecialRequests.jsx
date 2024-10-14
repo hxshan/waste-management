@@ -15,7 +15,7 @@ const SpecialRequests = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('special-request/all');
+        const response = await axios.get("special-request/all");
         console.log("API Response:", response.data);
         setSpecialRequests(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
@@ -35,7 +35,9 @@ const SpecialRequests = () => {
   // Filter data based on search term
   const filteredData = specialRequests.filter((item) =>
     Object.values(item).some((val) =>
-      val ? val.toString().toLowerCase().includes(searchTerm.toLowerCase()) : false
+      val
+        ? val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        : false
     )
   );
 
@@ -80,13 +82,10 @@ const SpecialRequests = () => {
             <tr className="bg-gray-100">
               <th className="px-4 py-2 text-left">ID</th>
               <th className="px-4 py-2 text-left">Waste Type</th>
-              <th className="px-4 py-2 text-left">Quantity</th>
               <th className="px-4 py-2 text-left">Description</th>
-              <th className="px-4 py-2 text-left">Contact No</th>
-              <th className="px-4 py-2 text-left">Special Instructions</th>
               <th className="px-4 py-2 text-left">Schedule Date</th>
               <th className="px-4 py-2 text-left">Status</th>
-              <th className="px-4 py-2 text-left">Location</th>
+              <th className="px-4 py-2 text-left"></th>
             </tr>
           </thead>
           <tbody>
@@ -104,13 +103,17 @@ const SpecialRequests = () => {
                 >
                   <td className="px-4 py-2">{row.id}</td>
                   <td className="px-4 py-2">{row.wasteType || "N/A"}</td>
-                  <td className="px-4 py-2">{row.quantity || "N/A"}</td>
                   <td className="px-4 py-2">{row.description || "N/A"}</td>
-                  <td className="px-4 py-2">{row.contactNo || "N/A"}</td>
-                  <td className="px-4 py-2">{row.specialInstructions || "N/A"}</td>
-                  <td className="px-4 py-2">{new Date(row.scheduleDate).toLocaleString() || "N/A"}</td>
+                  <td className="px-4 py-2">
+                    {new Date(row.scheduleDate).toLocaleString() || "N/A"}
+                  </td>
                   <td className="px-4 py-2">{row.status}</td>
-                  <td className="px-4 py-2">{row.location || "N/A"}</td>
+                  <td className="px-4 py-2">{row.status}</td>
+                  <td className="px-4 py-2 align-center">
+                    <button className="border-green-600 border-2 px-4 rounded-md flex items-center hover:bg-green-600 hover:text-white">
+                      Schedule
+                    </button>
+                  </td>
                 </tr>
               ))
             )}
