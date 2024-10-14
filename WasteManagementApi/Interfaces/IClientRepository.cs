@@ -11,7 +11,6 @@ namespace WasteManagementApi.Interfaces
     {
         Task<List<Client>> GetAllClientsAsync();
         Task<Client> GetClientByIdAsync(String id);
-        Task<Client> UpdateClientAsync(String id,ClientUpdateDto client);
         Task<bool> DeleteClientAsync(String id);
     }
 }

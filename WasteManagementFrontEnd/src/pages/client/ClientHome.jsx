@@ -1,8 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Trash2, Recycle, TrendingUp, Clock, Award, Users } from "lucide-react";
+import { useAuth } from "../../context/useAuth";
 
 const ClientHome = () => {
+  const {user,token}=useAuth();
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if(user !== null || token != null){
+      
+      if(user?.role == "Client"){
+        navigate("/client")
+      }else if (user?.role == "Admin"){
+        navigate("/admin")
+      }else if(user?.role == "Driver"){
+        navigate("/admin")
+      }
+    }
+
+  },[])
+
   return (
     <div className="bg-gray-50">
       {/* Hero Section */}
