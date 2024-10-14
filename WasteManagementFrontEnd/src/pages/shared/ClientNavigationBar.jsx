@@ -1,11 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const ClientNavigationBar = () => {
-
-  const navigator = useNavigate()
 
 const ClientNavigationBar = ({ selected }) => {
   const navigate = useNavigate();
@@ -18,7 +13,7 @@ const ClientNavigationBar = ({ selected }) => {
           <a href="#" className={`${selected === "home" ? 'font-bold' : ''} text-gray-600 hover:text-gray-800`} onClick={() => navigate('/client')}>Home</a>
           <a href="#" className={`${selected === "schedule" ? 'font-bold' : ''} text-gray-600 hover:text-gray-800`} onClick={()=>navigate('/shedule')}>Scheduled Collections</a>
           <a href="#" className={`${selected === "request" ? 'font-bold' : ''} text-gray-600 hover:text-gray-800`} onClick={() => navigate('/clientReq')}>Request Special Collection</a>
-          <a href="#" className={`${selected === "bill" ? 'font-bold' : ''} text-gray-600 hover:text-gray-800`} onClick={() => navigate('/bills')}>Billing</a>
+          <a  className={`${selected === "bill" ? 'font-bold' : ''} text-gray-600 hover:text-gray-800`} onClick={() => navigate('/bills')}>Billing</a>
         </div>
         <div className="flex items-center space-x-2">
           <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onClick={() => navigate('/profile')}>Profile</button>

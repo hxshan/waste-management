@@ -24,6 +24,7 @@ import BinRegistration from "./pages/admin/BinRegisterForm";
 import BinList from "./pages/admin/BinList";
 import BinRequestForm from "./pages/client/BinRequestForm.jsx";
 import BinRequestList from "./pages/admin/BinRequestlist.jsx";
+import CardPayment from "./pages/client/CardPayment.jsx";
 
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
               <Route path="/clientReq" element={<ClientRequest/>}/>
               <Route path="/profile" element={<ClientProfile/>}/>
               <Route path="/bills" element={<ClientBill/>}/>
+              <Route path="/payment" element={<CardPayment/>}/>
               <Route path="/shedule" element={<ClientShedule/>}/>
 
 
