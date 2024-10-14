@@ -19,7 +19,6 @@ namespace WasteManagementApi.Repositories
 
         public async Task<SpecialRequest> CreateAsync(SpecialRequest specialRequest)
         {
-            specialRequest.Status = "Pending";
             await _context.SpecialRequests.AddAsync(specialRequest);
             await _context.SaveChangesAsync();
             return specialRequest;

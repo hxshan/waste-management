@@ -21,13 +21,13 @@ namespace WasteManagementApi.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateSpecialRequest(SpecialRequestDto specialRequestDto)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> CreateSpecialRequest(string id, SpecialRequestDto specialRequestDto)
         {
             
                 var specialRequest = SpecialRequestMapper.MapSpecialRequestDtoToSpecialRequest(specialRequestDto);
                 var createdRequest = await _repository.CreateAsync(specialRequest);
-                return CreatedAtAction(nameof(GetSpecialRequest), new { id = createdRequest.Id }, createdRequest);
+                return CreatedAtAction(nameof(CreateSpecialRequest), new { id = createdRequest.Id }, createdRequest);
             
             
 
@@ -35,7 +35,7 @@ namespace WasteManagementApi.Controllers
 
 
 
-        [HttpGet("/user/{clientId}")]
+        [HttpGet("user/{clientId}")]
         public async Task<IActionResult> GetUserSpecialRequests(string clientId)
         {
             try
@@ -54,7 +54,7 @@ namespace WasteManagementApi.Controllers
 
         }
 
-        [HttpGet("/{requestId}")]
+        [HttpGet("{requestId}")]
         public async Task<IActionResult> GetSpecialRequest(string requestId)
         {
             var specialRequest = await _repository.GetByIdAsync(requestId);
@@ -65,6 +65,11 @@ namespace WasteManagementApi.Controllers
             return Ok(specialRequest);
         }
 
-        // Implement other CRUD operations as needed
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<SpecialRequest>>> GetAllSpecialReqests()
+        {
+            var specialRequests = await _repository.GetAllAsync();
+            return Ok(specialRequests);
+        }
     }
 }

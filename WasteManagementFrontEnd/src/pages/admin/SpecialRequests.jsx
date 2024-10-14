@@ -1,81 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios"; // Ensure axios is installed
 import { Search, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const SpecialRequests = () => {
   const navigator = useNavigate();
-
+  const [specialRequests, setSpecialRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 5;
 
-  const dummyData = [
-    {
-      id: 1,
-      customer: "John Doe",
-      description: "Recycling pickup",
-      location: "Downtown",
-      status: "Pending",
-      schedule: "Next Week",
-    },
-    {
-      id: 2,
-      customer: "Jane Smith",
-      description: "E-waste collection",
-      location: "Suburbs",
-      status: "Scheduled",
-      schedule: "Tomorrow",
-    },
-    {
-      id: 3,
-      customer: "Bob Johnson",
-      description: "Composting workshop",
-      location: "Community Center",
-      status: "Completed",
-      schedule: "Last Month",
-    },
-    {
-      id: 4,
-      customer: "Alice Brown",
-      description: "Green energy consultation",
-      location: "Business District",
-      status: "Pending",
-      schedule: "Next Month",
-    },
-    {
-      id: 5,
-      customer: "Charlie Davis",
-      description: "Waste audit",
-      location: "Industrial Park",
-      status: "In Progress",
-      schedule: "This Week",
-    },
-    {
-      id: 6,
-      customer: "Eva Wilson",
-      description: "Sustainability seminar",
-      location: "University Campus",
-      status: "Scheduled",
-      schedule: "Next Week",
-    },
-    {
-      id: 7,
-      customer: "Frank Miller",
-      description: "Solar panel installation",
-      location: "Residential Area",
-      status: "Pending",
-      schedule: "Next Month",
-    },
-  ];
+  // Fetch data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('special-request/all');
+        console.log("API Response:", response.data);
+        setSpecialRequests(Array.isArray(response.data) ? response.data : []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   // Filter data based on search term
-  const filteredData = dummyData.filter((item) =>
+  const filteredData = specialRequests.filter((item) =>
     Object.values(item).some((val) =>
-      val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      val ? val.toString().toLowerCase().includes(searchTerm.toLowerCase()) : false
     )
   );
 
-  // Calculate pagination
+  // Pagination calculation
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -104,7 +68,7 @@ const SpecialRequests = () => {
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setCurrentPage(1);
+                setCurrentPage(1); // Reset to first page on search
               }}
             />
             <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
@@ -115,24 +79,41 @@ const SpecialRequests = () => {
           <thead>
             <tr className="bg-gray-100">
               <th className="px-4 py-2 text-left">ID</th>
-              <th className="px-4 py-2 text-left">Customer</th>
+              <th className="px-4 py-2 text-left">Waste Type</th>
+              <th className="px-4 py-2 text-left">Quantity</th>
               <th className="px-4 py-2 text-left">Description</th>
-              <th className="px-4 py-2 text-left">Location</th>
+              <th className="px-4 py-2 text-left">Contact No</th>
+              <th className="px-4 py-2 text-left">Special Instructions</th>
+              <th className="px-4 py-2 text-left">Schedule Date</th>
               <th className="px-4 py-2 text-left">Status</th>
-              <th className="px-4 py-2 text-left">Schedule</th>
+              <th className="px-4 py-2 text-left">Location</th>
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((row, index) => (
-              <tr key={row.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                <td className="px-4 py-2">{row.id}</td>
-                <td className="px-4 py-2">{row.customer}</td>
-                <td className="px-4 py-2">{row.description}</td>
-                <td className="px-4 py-2">{row.location}</td>
-                <td className="px-4 py-2">{row.status}</td>
-                <td className="px-4 py-2">{row.schedule}</td>
+            {filteredData.length === 0 ? (
+              <tr>
+                <td colSpan="9" className="text-center py-4">
+                  No special requests found.
+                </td>
               </tr>
-            ))}
+            ) : (
+              currentItems.map((row, index) => (
+                <tr
+                  key={row.id}
+                  className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                >
+                  <td className="px-4 py-2">{row.id}</td>
+                  <td className="px-4 py-2">{row.wasteType || "N/A"}</td>
+                  <td className="px-4 py-2">{row.quantity || "N/A"}</td>
+                  <td className="px-4 py-2">{row.description || "N/A"}</td>
+                  <td className="px-4 py-2">{row.contactNo || "N/A"}</td>
+                  <td className="px-4 py-2">{row.specialInstructions || "N/A"}</td>
+                  <td className="px-4 py-2">{new Date(row.scheduleDate).toLocaleString() || "N/A"}</td>
+                  <td className="px-4 py-2">{row.status}</td>
+                  <td className="px-4 py-2">{row.location || "N/A"}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
 

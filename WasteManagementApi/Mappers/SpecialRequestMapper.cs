@@ -14,6 +14,7 @@ namespace WasteManagementApi.Mappers
                 ScheduleDate = specialRequest.ScheduleDate,
                 Location = specialRequest.Location,
                 WasteType = specialRequest.WasteType,
+                Status = "pending",
                 Quantity = specialRequest.Quantity,
                 Description = specialRequest.Description,
                 ContactNo = specialRequest.ContactNo,
