@@ -19,7 +19,6 @@ namespace WasteManagementApi.Repositories
 
         public async Task<SpecialRequest> CreateAsync(SpecialRequest specialRequest)
         {
-            specialRequest.Status = "Pending";
             await _context.SpecialRequests.AddAsync(specialRequest);
             await _context.SaveChangesAsync();
             return specialRequest;
@@ -32,7 +31,7 @@ namespace WasteManagementApi.Repositories
                 .ToListAsync();
         }
 
-        public async Task<SpecialRequest> GetByIdAsync(string id)
+        public async Task<SpecialRequest> GetByIdAsync(int id)
         {
             return await _context.SpecialRequests.FindAsync(id);
         }
@@ -49,7 +48,7 @@ namespace WasteManagementApi.Repositories
             return specialRequest;
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(int id)
         {
             var specialRequest = await _context.SpecialRequests.FindAsync(id);
             if (specialRequest != null)

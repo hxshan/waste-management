@@ -17,6 +17,7 @@ namespace WasteManagementApi.Mappers
                 FirstName = client.FirstName,
                 MiddleName = client.MiddleName,
                 LastName = client.LastName,
+                Email = client.Email,
                 NIC = client.NIC,
                 Address = client.Address,
                 AddressLatitude = client.AddressLatitude,
