@@ -2,7 +2,7 @@ import React from "react";
 import ClientNavigationBar from "../shared/ClientNavigationBar";
 import ClientFooter from "../shared/ClientFooter";
 import ClientRegisterForm from "../../components/ClientRegisterForm";
-import SpecialRequest from "../../components/Client/SpecialRequest";
+import SpecialRequest from "../../components/Client/SpecialRequestClient";
 
 const ClientDashboard = () => {
   return (
