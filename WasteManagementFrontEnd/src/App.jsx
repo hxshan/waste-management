@@ -12,6 +12,10 @@ import Topbar from "./pages/shared/Topbar";
 import SpecialRequestForm from "./pages/client/SpecialRequestForm";
 import ClientHome from "./pages/client/ClientHome";
 import AdminSpecialRequestForm from "./pages/admin/AdminSpecialRequestForm";
+import BinRegistration from "./pages/admin/BinRegisterForm";
+import BinList from "./pages/admin/BinList";
+import BinRequestForm from "./pages/client/BinRequestForm.jsx";
+import BinRequestList from "./pages/admin/BinRequestlist.jsx";
 
 function App() {
 
@@ -36,6 +40,11 @@ function App() {
               <Route path="/client-new-special-requst" element= {<SpecialRequestForm/> }/>
 
               <Route path="/admin" element={<AdminDashboard />} />
+              
+              <Route path="/bin-registraion" element={<BinRegistration />} />
+              <Route path="/binlist" element={<BinList />} />
+              <Route path="/bin-requestform" element={<BinRequestForm />} />
+              <Route path="/bin-requestlist" element={<BinRequestList />} />
 
               <Route path="/admin" element={<AdminDashboard />} />
               <Route
