@@ -8,5 +8,6 @@ namespace WasteManagementApi.Interfaces
     public interface IAdminService
     {
         Task AssignTruckToDriver(string driverId, int truckId);
+        Task AssignTruckToHelper(string helperid, int truckId);
     }
 }
