@@ -4,11 +4,11 @@ import ClientFooter from "../shared/ClientFooter";
 import ClientRegisterForm from "../../components/ClientRegisterForm";
 import SpecialRequest from "../../components/Client/SpecialRequest";
 
-const ClientDashboard = () => {
+const ClientRequest = () => {
   return (
     <div>
       <div>
-        <ClientNavigationBar />
+        <ClientNavigationBar selected={'request'}/>
       </div>
 
       <div className="my-8 bg-white">
@@ -22,4 +22,4 @@ const ClientDashboard = () => {
   );
 };
 
-export default ClientDashboard;
+export default ClientRequest;

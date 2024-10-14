@@ -41,29 +41,6 @@ namespace WasteManagementApi.Controllers
             return Ok(ClientMapper.MapClientToClientDto(client));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateClient(String id, ClientUpdateDto clientDto)
-        {
-           
-            try
-            {
-                await _clientRepository.UpdateClientAsync(id,clientDto);
-            }
-            catch (Exception)
-            {
-                if (!await ClientExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         private async Task<bool> ClientExists(String id)
         {
             var client = await _clientRepository.GetClientByIdAsync(id);
