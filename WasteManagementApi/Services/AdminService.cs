@@ -10,10 +10,12 @@ namespace WasteManagementApi.Services
     {
         private readonly IDriverRepository _driverRepo;
         private readonly ITruckRepository _truckRepo;
-        public AdminService(IDriverRepository driverRepo, ITruckRepository truckRepo)
+        private readonly IHelperRepository _helperRepo;
+        public AdminService(IDriverRepository driverRepo, ITruckRepository truckRepo,IHelperRepository helperRepo)
         {
             _driverRepo =driverRepo;
             _truckRepo = truckRepo;
+            _helperRepo = helperRepo;
         }
 
         
@@ -37,6 +39,30 @@ namespace WasteManagementApi.Services
             driver.TruckId =truckId;
         
             await _driverRepo.UpdateDriverAsync(driver);
+
+        }
+
+        public async Task AssignTruckToHelper(string helperid, int truckId)
+        {
+            var helper = await _helperRepo.GetHelperByIdAsync(helperid);
+
+            if(helper == null ){
+                throw new NullReferenceException("Helper not found.");
+            }
+
+            var truck = await _truckRepo.GetTruckByIdAsync(truckId);
+
+            if(truck == null ){
+                throw new NullReferenceException("Truck not found.");
+            }
+
+            if(await _helperRepo.IsAssignedToTruck(helperid)){
+                throw new InvalidOperationException("Helper is already assigned to another Truck.");
+            }
+
+            helper.TruckId = truckId;
+
+            await _helperRepo.UpdateHelperAsync(helper);
 
         }
     }

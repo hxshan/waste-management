@@ -40,8 +40,8 @@ namespace WasteManagementApi.Controllers
 
 
 
-        [HttpPut("{driverid}/assing-truck/{truckid}")]
-        public async Task<IActionResult> AssignTruck(string driverid,int truckid){
+        [HttpPut("{driverid}/assign-truckdriver/{truckid}")]
+        public async Task<IActionResult> AssignTruckDriver(string driverid,int truckid){
             
             try{
                await _adminService.AssignTruckToDriver(driverid, truckid);
@@ -53,6 +53,19 @@ namespace WasteManagementApi.Controllers
             }
         }
 
+
+        [HttpPut("{helperid}/assign-truckhelper/{truckid}")]
+        public async Task<IActionResult> AssignTruckHelper(string helperid,int truckid){
+            
+            try{
+               await _adminService.AssignTruckToHelper(helperid, truckid);
+              return Ok("Helper Assigned Successfully");
+            }catch(NullReferenceException ex){
+                return NotFound(ex.Message);
+            }catch(InvalidOperationException ex){
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
