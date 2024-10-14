@@ -19,11 +19,17 @@ namespace WasteManagementApi.Repositories
 
         public async Task<SpecialRequest> CreateAsync(SpecialRequest specialRequest)
         {
-            specialRequest.Id = Guid.NewGuid().ToString();
             specialRequest.Status = "Pending";
-            _context.SpecialRequests.Add(specialRequest);
+            await _context.SpecialRequests.AddAsync(specialRequest);
             await _context.SaveChangesAsync();
             return specialRequest;
+        }
+
+        public async Task<IEnumerable<SpecialRequest>> GetByUserIdAsync(string userId)
+        {
+            return await _context.SpecialRequests
+                .Where(sr => sr.ClientId == userId)
+                .ToListAsync();
         }
 
         public async Task<SpecialRequest> GetByIdAsync(string id)
