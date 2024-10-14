@@ -55,7 +55,7 @@ namespace WasteManagementApi.Controllers
         }
 
         [HttpGet("{requestId}")]
-        public async Task<IActionResult> GetSpecialRequest(string requestId)
+        public async Task<IActionResult> GetSpecialRequest(int requestId)
         {
             var specialRequest = await _repository.GetByIdAsync(requestId);
             if (specialRequest == null)
@@ -71,5 +71,34 @@ namespace WasteManagementApi.Controllers
             var specialRequests = await _repository.GetAllAsync();
             return Ok(specialRequests);
         }
+
+         [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSpecialRequest(int id, SpecialRequestDto specialRequestDto)
+        {
+            var existingRequest = await _repository.GetByIdAsync(id);
+            if (existingRequest == null)
+            {
+                return NotFound();
+            }
+
+            SpecialRequestMapper.UpdateSpecialRequestFromDto(existingRequest, specialRequestDto);
+
+            var updatedRequest = await _repository.UpdateAsync(existingRequest);
+            return Ok(updatedRequest);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSpecialRequest(int id)
+        {
+            var existingRequest = await _repository.GetByIdAsync(id);
+            if (existingRequest == null)
+            {
+                return NotFound();
+            }
+
+            await _repository.DeleteAsync(id);
+            return NoContent();
+        }
+
     }
 }
