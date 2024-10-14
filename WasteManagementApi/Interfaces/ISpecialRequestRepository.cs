@@ -8,9 +8,9 @@ namespace WasteManagementApi.Interfaces
     {
         Task<SpecialRequest> CreateAsync(SpecialRequest specialRequest);
         Task<IEnumerable<SpecialRequest>> GetByUserIdAsync(string userId);
-        Task<SpecialRequest> GetByIdAsync(string id);
+        Task<SpecialRequest> GetByIdAsync(int id);
         Task<IEnumerable<SpecialRequest>> GetAllAsync();
         Task<SpecialRequest> UpdateAsync(SpecialRequest specialRequest);
-        Task DeleteAsync(string id);
+        Task DeleteAsync(int id);
     }
 }

@@ -1,3 +1,4 @@
+import ClientDashboard from "./pages/client/ClientDashboard";
 import { useState} from "react";
 import { Route, Routes, useLocation  } from "react-router-dom";
 import ClientRequest from "./pages/client/ClientRequest";
@@ -24,27 +25,48 @@ import BinRegistration from "./pages/admin/BinRegisterForm";
 import BinList from "./pages/admin/BinList";
 import BinRequestForm from "./pages/client/BinRequestForm.jsx";
 import BinRequestList from "./pages/admin/BinRequestlist.jsx";
+import ClientAllSpecialRequests from "./pages/client/ClientAllSpecialRequests.jsx";
+import SpecialRequestDetailAdmin from "./pages/admin/SpecialRequestDetailAdmin.jsx";
 import CardPayment from "./pages/client/CardPayment.jsx";
 
 
 function App() {
-
-  const location = useLocation()
-  const isLoginPage = location.pathname === '/login'
-
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
 
   return (
     <div className="flex flex-col h-screen bg-slate-100">
       {/*{!isLoginPage && <Topbar />} */}
-      
+
       <div className="flex flex-1 overflow-hidden">
         {/*{!isLoginPage && <NavigationBar />}*/}
         <main className="flex-1 overflow-y-auto">
-        <Routes>
-              <Route path="/" element= {<ClientHome />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/login" element={<Login />} />
+          <Routes>
+            <Route path="/" element={<ClientHome />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login />} />
 
+            <Route path="/client" element={<ClientDashboard />} />
+            <Route path="/client-register" element={<ClientRegister />} />
+            <Route
+              path="/client-special-requst"
+              element={<SpecialRequestClient />}
+            />
+            <Route
+              path="/client-new-special-requst"
+              element={<SpecialRequestForm />}
+            />
+            <Route
+              path="/all-special-requests-client"
+              element={<ClientAllSpecialRequests />}
+            />
+
+            <Route path="/admin" element={<AdminDashboard />} />
+
+            <Route path="/bin-registraion" element={<BinRegistration />} />
+            <Route path="/binlist" element={<BinList />} />
+            <Route path="/bin-requestform" element={<BinRequestForm />} />
+            <Route path="/bin-requestlist" element={<BinRequestList />} />
               <Route path="/client-register" element={<ClientRegister />} />
               <Route path="/client-special-requst" element= {<SpecialRequestClient /> }/>
               <Route path="/client-new-special-requst" element= {<SpecialRequestForm/> }/>
@@ -56,31 +78,29 @@ function App() {
               <Route path="/shedule" element={<ClientShedule/>}/>
 
 
-              <Route path="/admin" element={<AdminDashboard />} />
-              
-              <Route path="/bin-registraion" element={<BinRegistration />} />
-              <Route path="/binlist" element={<BinList />} />
-              <Route path="/bin-requestform" element={<BinRequestForm />} />
-              <Route path="/bin-requestlist" element={<BinRequestList />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route
+              path="/admin-driver-register"
+              element={<DriverRegistration />}
+            />
+            <Route
+              path="/admin-helper-register"
+              element={<HelperRegistration />}
+            />
+            <Route
+              path="/admin-special-request"
+              element={<SpecialRequests />}
+            />
+            <Route
+              path="/new-special-request"
+              element={<AdminSpecialRequestForm />}
+            />
 
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route
-                path="/admin-driver-register"
-                element={<DriverRegistration />}
-              />
-              <Route
-                path="/admin-helper-register"
-                element={<HelperRegistration />}
-              />
-              <Route
-                path="/admin-special-request"
-                element={<SpecialRequests />}
-              />
-              <Route
-                path="/new-special-request"
-                element={<AdminSpecialRequestForm />}
-              />
-            </Routes>
+<Route
+              path="/special-request-page/:id"
+              element={<SpecialRequestDetailAdmin />}
+            />
+          </Routes>
         </main>
       </div>
     </div>
