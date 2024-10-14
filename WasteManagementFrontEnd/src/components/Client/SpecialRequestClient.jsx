@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../api/axios";
 
 // Card component for individual special request
 const SpecialRequestClientCard = ({ data }) => {
@@ -47,12 +47,14 @@ const SpecialRequestClient = () => {
   const [SpecialRequestClients, setSpecialRequestClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [uId, setUId] = useState();
 
   useEffect(() => {
     const fetchSpecialRequestClients = async () => {
       try {
-        // Replace with your actual API endpoint
-        const response = await axios.get(`/api/special-request/user/${"0001d9cc-6075-4935-8e1e-fed4cbf307db"}`);
+        setUId("bb797925-dfae-4531-aadd-294a87fd73f2")
+
+        const response = await axios.get(`special-request/user/${uId}`);
         console.log(response.data); 
         setSpecialRequestClients(response.data); 
         setLoading(false);

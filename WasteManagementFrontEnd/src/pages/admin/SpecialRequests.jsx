@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios"; // Ensure axios is installed
+import axios from "../../api/axios"; // Ensure axios is installed
 import { Search, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -70,7 +70,7 @@ const SpecialRequests = () => {
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setCurrentPage(1); // Reset to first page on search
+                setCurrentPage(1);
               }}
             />
             <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
@@ -107,7 +107,6 @@ const SpecialRequests = () => {
                   <td className="px-4 py-2">
                     {new Date(row.scheduleDate).toLocaleString() || "N/A"}
                   </td>
-                  <td className="px-4 py-2">{row.status}</td>
                   <td className="px-4 py-2">{row.status}</td>
                   <td className="px-4 py-2 align-center">
                     <button className="border-green-600 border-2 px-4 rounded-md flex items-center hover:bg-green-600 hover:text-white">
