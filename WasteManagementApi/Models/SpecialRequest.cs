@@ -13,6 +13,6 @@ namespace WasteManagementApi.Models
         public String? Quantity { get; set; }
         public String? Description { get; set; }
         public string ContactNo { get; internal set; }
-        public string SpecialInstructions { get; internal set; }
+        public string? SpecialInstructions { get; internal set; }
     }
 }

@@ -6,12 +6,11 @@ import ClientNavigationBar from "../shared/ClientNavigationBar";
 
 const SpecialRequestForm = () => {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState(""); // Assume we get this from a login context or state
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    // Here you would typically fetch the logged-in user's ID
-    // For now, we'll just simulate it
-    setUserId("logged-in-user-id");
+
+    setUserId("testUser");
   }, []);
 
   const [formData, setFormData] = useState({
