@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, User, Phone, CreditCard, MapPin, Mail, Lock } from "lucide-react";
 import MapPicker from "./MapPicker";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import axios from "../api/axios";
 
 const ClientRegisterForm = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -31,13 +35,59 @@ const ClientRegisterForm = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const nextStep = () => setStep((prevStep) => prevStep + 1);
-  const prevStep = () => setStep((prevStep) => prevStep - 1);
-
-  const handleSubmit = (e) => {
+  const nextStep = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Here you would typically send the data to your backend
+    setStep((prevStep) => prevStep + 1);
+  };
+
+  const prevStep = (e) => {
+    e.preventDefault();
+    setStep((prevStep) => prevStep - 1);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const submissionData = {
+        firstName: formData.firstName,
+        middleName: formData.middleName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber,
+        nic: formData.nicNumber,
+        address: formData.address,
+        addressLongitude: lng || -22.22,
+        addressLatitude: lat || 45.34
+      };
+  
+      console.log("Submission data:", submissionData);
+  
+      const response = await axios.post("account/register-client", {
+          ...submissionData
+      });
+  
+  
+      if (response.statusText === "OK") {
+        Swal.fire({
+          title: "Success!",
+          text: "Registration submitted successfully!",
+          icon: "success",
+        }).then(() => {
+          navigate("/login");
+        });
+      } else {
+        console.log(response)
+        throw new Error(response.message || "Failed to register");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      Swal.fire({
+        title: "Error!",
+        text: error.message || "Failed to register. Please try again.",
+        icon: "error",
+      });
+    }
   };
 
   const renderStep = () => {
@@ -51,6 +101,7 @@ const ClientRegisterForm = () => {
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
+              required
             />
             <InputField
               icon={<User className="text-gray-400" />}
@@ -58,6 +109,7 @@ const ClientRegisterForm = () => {
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
+              required
             />
             <InputField
               icon={<User className="text-gray-400" />}
@@ -77,6 +129,7 @@ const ClientRegisterForm = () => {
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleChange}
+              required
             />
             <InputField
               icon={<CreditCard className="text-gray-400" />}
@@ -84,6 +137,7 @@ const ClientRegisterForm = () => {
               name="nicNumber"
               value={formData.nicNumber}
               onChange={handleChange}
+              required
             />
           </div>
         );
@@ -108,6 +162,7 @@ const ClientRegisterForm = () => {
               type="email"
               value={formData.email}
               onChange={handleChange}
+              required
             />
             <InputField
               icon={<Lock className="text-gray-400" />}
@@ -116,6 +171,7 @@ const ClientRegisterForm = () => {
               type="password"
               value={formData.password}
               onChange={handleChange}
+              required
             />
           </div>
         );
@@ -130,7 +186,7 @@ const ClientRegisterForm = () => {
       <div className="mb-8">
         <ProgressBar currentStep={step} totalSteps={3} />
       </div>
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={step === 3 ? handleSubmit : nextStep} className="space-y-8">
         {renderStep()}
         <div className="flex justify-between mt-10">
           {step > 1 && (
@@ -145,8 +201,7 @@ const ClientRegisterForm = () => {
           )}
           {step < 3 ? (
             <button
-              type="button"
-              onClick={nextStep}
+              type="submit"
               className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors ml-auto"
             >
               Next
@@ -166,7 +221,7 @@ const ClientRegisterForm = () => {
   );
 };
 
-const InputField = ({ icon, label, name, value, onChange, type = "text" }) => (
+const InputField = ({ icon, label, name, value, onChange, type = "text", required = false }) => (
   <div>
     <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-2">
       {label}
@@ -183,6 +238,7 @@ const InputField = ({ icon, label, name, value, onChange, type = "text" }) => (
         onChange={onChange}
         className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
         placeholder={label}
+        required={required}
       />
     </div>
   </div>
