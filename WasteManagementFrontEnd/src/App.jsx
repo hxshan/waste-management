@@ -1,6 +1,6 @@
 import { useState} from "react";
 import { Route, Routes, useLocation  } from "react-router-dom";
-import ClientDashboard from "./pages/client/ClientDashboard";
+import ClientRequest from "./pages/client/ClientRequest";
 import ClientRegister from "./pages/client/ClientRegister";
 import DriverRegistration from "./pages/admin/DriverRegistration";
 import Login from "./pages/shared/Login";
@@ -12,11 +12,19 @@ import Topbar from "./pages/shared/Topbar";
 import SpecialRequestForm from "./pages/client/SpecialRequestForm";
 import ClientHome from "./pages/client/ClientHome";
 import AdminSpecialRequestForm from "./pages/admin/AdminSpecialRequestForm";
+import ClientDashMain from "./pages/client/ClientDashMain";
+import ClientProfile from "./pages/client/ClientProfile";
+import ClientBill from "./pages/client/ClientBill";
+import ClientShedule from "./pages/client/ClientShedule";
+
+
+
 import SpecialRequestClient from "./components/Client/SpecialRequestClient";
 import BinRegistration from "./pages/admin/BinRegisterForm";
 import BinList from "./pages/admin/BinList";
 import BinRequestForm from "./pages/client/BinRequestForm.jsx";
 import BinRequestList from "./pages/admin/BinRequestlist.jsx";
+import CardPayment from "./pages/client/CardPayment.jsx";
 
 
 function App() {
@@ -37,10 +45,16 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/login" element={<Login />} />
 
-              <Route path="/client" element={<ClientDashboard />} />
               <Route path="/client-register" element={<ClientRegister />} />
               <Route path="/client-special-requst" element= {<SpecialRequestClient /> }/>
               <Route path="/client-new-special-requst" element= {<SpecialRequestForm/> }/>
+              <Route path="/client" element={<ClientDashMain/>}/>
+              <Route path="/clientReq" element={<ClientRequest/>}/>
+              <Route path="/profile" element={<ClientProfile/>}/>
+              <Route path="/bills" element={<ClientBill/>}/>
+              <Route path="/payment" element={<CardPayment/>}/>
+              <Route path="/shedule" element={<ClientShedule/>}/>
+
 
               <Route path="/admin" element={<AdminDashboard />} />
               
