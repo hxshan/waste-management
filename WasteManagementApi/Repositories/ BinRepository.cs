@@ -9,7 +9,7 @@ using WasteManagementApi.Models;
 
 namespace WasteManagementApi.Repositories
 {
-   public class BinRepository : IBinRepository
+    public class BinRepository : IBinRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -40,6 +40,8 @@ namespace WasteManagementApi.Repositories
             _context.Entry(bin).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+      
+
 
         public async Task DeleteBinAsync(int id)
         {
