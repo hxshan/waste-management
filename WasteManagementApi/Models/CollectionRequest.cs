@@ -13,9 +13,9 @@ namespace WasteManagementApi.Models
         public DateTime ScheduleDate { get; set; }
         public string Status { get; set; }
         public string? Location { get; set; }
+
         public float? LocationLongitude{get;set;}
         public float? LocationLatitude{get;set;}
         
-
     }
 }
