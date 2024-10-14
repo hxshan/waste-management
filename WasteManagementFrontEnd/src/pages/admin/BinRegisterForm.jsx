@@ -75,6 +75,7 @@ const BinRegistrationForm = () => {
               placeholder="Enter Max Waste Capacity"
             />
           </div>
+          
 
           {/* Input field for currentWasteCapacity */}
           <div className="mb-4">
