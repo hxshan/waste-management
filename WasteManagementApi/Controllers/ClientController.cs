@@ -16,10 +16,12 @@ namespace WasteManagementApi.Controllers
     public class ClientController : ControllerBase
     {
         private readonly IClientRepository _clientRepository;
+        private readonly INormalRequestRepository _normalReqRepo;
 
-        public ClientController(IClientRepository clientRepository)
+        public ClientController(IClientRepository clientRepository,INormalRequestRepository normalReqRepo)
         {
             _clientRepository = clientRepository;
+            _normalReqRepo = normalReqRepo;
         }
 
         [HttpGet]
@@ -71,17 +73,18 @@ namespace WasteManagementApi.Controllers
             try{
 
             var collectionRequest = new NormalRequest{
-                ClientId=requestDto.ClientId,
+                ClientId=userid,
                 ScheduleDate=requestDto.ScheduleDate,
                 Status="pending",
                 BinId=requestDto.BinId
             };
-            
+            await _normalReqRepo.CreateNormalRequest(collectionRequest);
+
             }catch(Exception ex){
-                Problem("Internal Server Error");
+                Problem("Error When Creating Request");
             }
             
-            return Ok();
+            return Ok("Request Created Successfully");
         }
 
         private async Task<bool> ClientExists(String id)
