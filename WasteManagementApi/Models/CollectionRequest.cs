@@ -7,7 +7,7 @@ namespace WasteManagementApi.Models
 {
     public class CollectionRequest
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string ClientId { get; set; }
         public Client Client{get;set;}
         public DateTime ScheduleDate { get; set; }

@@ -78,13 +78,29 @@ namespace WasteManagementApi.Controllers
                 Status="pending",
                 BinId=requestDto.BinId
             };
+            
             await _normalReqRepo.CreateNormalRequest(collectionRequest);
+            return Ok("Request Created Successfully");
 
             }catch(Exception ex){
-                Problem("Error When Creating Request");
+               return Problem("Error When Creating Request");
             }
             
-            return Ok("Request Created Successfully");
+        }
+
+        [HttpGet("collection-request/{userid}")]
+        public async Task<IActionResult> GetCollectionRequest(string userid){
+            
+            try{
+
+            var requests=await _normalReqRepo.GetRequestsByClientId(userid);
+            return Ok(requests);
+
+            }catch(Exception ex){
+               return Problem("Error When Retrieving Request");
+            }
+            
+           
         }
 
         private async Task<bool> ClientExists(String id)

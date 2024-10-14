@@ -104,9 +104,6 @@ namespace WasteManagementApi.Data
                 .OnDelete(DeleteBehavior.Restrict) 
         );
         
-            
-
-        
 
         }
 

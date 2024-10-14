@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WasteManagementApi.Migrations
 {
     /// <inheritdoc />
-    public partial class fixcol2 : Migration
+    public partial class requp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -243,7 +243,8 @@ namespace WasteManagementApi.Migrations
                 name: "CollectionRequests",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ScheduleDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -253,8 +254,11 @@ namespace WasteManagementApi.Migrations
                     Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
                     BinId = table.Column<int>(type: "int", nullable: true),
                     WasteType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SpecialRequest_WasteType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Quantity = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SpecialInstructions = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -269,8 +273,7 @@ namespace WasteManagementApi.Migrations
                         name: "FK_CollectionRequests_Bins_BinId",
                         column: x => x.BinId,
                         principalTable: "Bins",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -280,7 +283,7 @@ namespace WasteManagementApi.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RequestId = table.Column<int>(type: "int", nullable: false),
-                    CollectionRequestId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CollectionRequestId = table.Column<int>(type: "int", nullable: true),
                     CollectionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TruckId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
