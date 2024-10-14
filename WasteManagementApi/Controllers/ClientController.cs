@@ -51,28 +51,7 @@ namespace WasteManagementApi.Controllers
             return Ok(ClientMapper.MapClientToClientDto(client));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateClient(String id, ClientUpdateDto clientDto)
-        {
-           
-            try
-            {
-                await _clientRepository.UpdateClientAsync(id,clientDto);
-            }
-            catch (Exception)
-            {
-                if (!await ClientExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        
 
         [HttpPost("collection-request/{userid}")]
         public async Task<IActionResult> CreateCollectionRequest(string userid,NormalRequestDto requestDto){
