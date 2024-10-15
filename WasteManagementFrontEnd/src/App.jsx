@@ -27,6 +27,7 @@ import EditBin from "./pages/admin/updatebindetails.jsx";
 import ClientAllSpecialRequests from "./pages/client/ClientAllSpecialRequests.jsx";
 import SpecialRequestDetailAdmin from "./pages/admin/SpecialRequestDetailAdmin.jsx";
 import CardPayment from "./pages/client/CardPayment.jsx";
+import DriverDashboard from "./pages/driver/DriverDashboard.jsx";
 
 
 function App() {
@@ -77,8 +78,10 @@ function App() {
               <Route path="/shedule" element={<ClientShedule/>}/>
 
 
-
+              <Route path="/driver" element={<DriverDashboard />} />
+            
               <Route path="/admin" element={<AdminDashboard />} />
+
               <Route path="/bin-registraion" element={<BinRegistration />} />
               <Route path="/binlist" element={<BinList />} />
               <Route path="/edit-bin/:id" element={<EditBin />} />

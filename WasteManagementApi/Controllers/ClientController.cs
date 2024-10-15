@@ -57,8 +57,9 @@ namespace WasteManagementApi.Controllers
         public async Task<IActionResult> CreateCollectionRequest(string userid,NormalRequestDto requestDto){
             
             try{
-
+            
             var collectionRequest = new NormalRequest{
+                WasteType=requestDto.WasteType,
                 ClientId=userid,
                 ScheduleDate=requestDto.ScheduleDate,
                 Status="pending",

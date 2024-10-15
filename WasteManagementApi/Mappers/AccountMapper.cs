@@ -51,6 +51,27 @@ namespace WasteManagementApi.Mappers
             };
 
         }
+        public static AdminStaff MapAdminRegisterToAdmin(AdminRegisterDto registerDto)
+        {
+            return new AdminStaff
+            {
+                UserName = registerDto.FirstName + registerDto.LastName,
+                Email = registerDto.Email,
+                FirstName = registerDto.FirstName,
+                MiddleName = registerDto.MiddleName,
+                LastName = registerDto.LastName,
+                NIC = registerDto.NIC,
+                EmergencyContact = registerDto.EmergencyContact,
+                Address = registerDto.Address,
+                PhoneNumber = registerDto.PhoneNumber,
+                DateOfHire = registerDto.DateOfHire,
+                DateOfResignation = null,
+                IsActive = registerDto.IsActive,
+                Salary =  registerDto.Salary,
+                Department = registerDto.Department,
+            };
+
+        }
         public static Client MapClientRegisterToClient(ClientRegisterDto registerDto)
         {
             return new Client

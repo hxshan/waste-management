@@ -17,6 +17,11 @@ namespace WasteManagementApi.Repositories
             _context = context;
         }
 
+        public async Task<Truck> CreateTruckAsync(Truck truck)
+        {
+            await _context.Trucks.AddAsync(truck);
+            return truck;
+        }
         public async Task<Truck> GetTruckByIdAsync(int id)
         {
             var truck = await _context.Trucks.FindAsync(id);

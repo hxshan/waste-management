@@ -15,21 +15,19 @@ const Login = () => {
   }, []);
 
   return (
-    <div className='flex flex-wrap justify-center items-center h-screen bg-[#ffffff]'>
-      <div className= 'h-full w-1/2'>
-      <img
+    <div className="flex flex-wrap justify-center items-center h-screen bg-[#ffffff]">
+      <div className="h-full w-1/2">
+        <img
           src="https://img.freepik.com/premium-photo/purple-recycling-bin-with-leaves-coral-background-waste-management-3d-illustration_37732-1699.jpg"
           alt="Poster"
           className="object- w-full h-full"
         />
       </div>
-      <div className='w-1/2 flex justify-center items-center h-full'>
-        <div
-          className="flex flex-col w-2/4 mx-auto  md:p-10 2xl:p-12 bg-[#ffffff] rounded-2xl shadow-xl"
-        >
+      <div className="w-1/2 flex justify-center items-center h-full">
+        <div className="flex flex-col w-2/4 mx-auto  md:p-10 2xl:p-12 bg-[#ffffff] rounded-2xl shadow-xl">
           <div className="flex flex-row gap-3 pb-4 ">
             <h1 className="text-3xl text-center font-bold text-black my-auto">
-             Login
+              Login
             </h1>
           </div>
           <form className="flex flex-col ">
@@ -117,6 +115,13 @@ const Login = () => {
             >
               Login
             </button>
+            <div className="mt-4">
+              <p>
+                <span>
+                  Dont have an account? <span onClick={()=>navigate("/")} className="font-bold text-lg hover:cursor-pointer">Register</span>
+                </span>
+              </p>
+            </div>
           </form>
         </div>
       </div>

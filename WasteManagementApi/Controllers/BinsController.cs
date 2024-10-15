@@ -42,6 +42,22 @@ namespace WasteManagementApi.Controllers
             return bin.ToDTO();
         }
 
+        [HttpGet("client/{id}")]
+        public async Task<ActionResult<List<BinDtos>>> GetBinsByClientId(string id)
+        {
+            var bin = await _binRepository.GetBinsByClientIdAsync(id);
+
+            if (bin == null)
+            {
+                return NotFound();
+            }
+
+           var bins = bin.Select(b => b.ToDTO()).ToList();
+
+
+            return bins;
+        }
+
         // POST: api/Bins
         [HttpPost]
         public async Task<ActionResult<BinDtos>> PostBin(BinDtos binDTO)

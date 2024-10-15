@@ -9,6 +9,7 @@ namespace WasteManagementApi.Interfaces
     public interface IBinRepository
     {
         Task<IEnumerable<Bin>> GetAllBinsAsync();
+        Task<IEnumerable<Bin>> GetBinsByClientIdAsync(string id);
         Task<Bin> GetBinByIdAsync(int id);
         Task<Bin> CreateBinAsync(Bin bin);
         Task UpdateBinAsync(Bin bin);

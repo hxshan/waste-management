@@ -65,6 +65,7 @@ namespace WasteManagementApi.Controllers
             return Ok(specialRequest);
         }
 
+
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<SpecialRequest>>> GetAllSpecialReqests()
         {

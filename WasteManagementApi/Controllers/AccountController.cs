@@ -208,52 +208,94 @@ namespace WasteManagementApi.Controllers
             }
 
         }
+        [HttpPost("register-admin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] AdminRegisterDto registerDto)
+        {
+
+            try
+            {
+                
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid Data Format");
+                }
+                var admin = AccountMapper.MapAdminRegisterToAdmin(registerDto);
+
+                var CreatedUser = await _userManager.CreateAsync(admin, registerDto.Password);
+
+                if (!CreatedUser.Succeeded)
+                {
+                    return StatusCode(500, CreatedUser.Errors);
+
+                }
+
+                var roleResult = await _userManager.AddToRoleAsync(admin, "Admin");
+
+                if (!roleResult.Succeeded)
+                {
+                    return StatusCode(500, roleResult.Errors);
+
+                }
+                return Ok(new NewUserDto
+                {
+                    UserName = admin.UserName,
+                    Email = admin.Email,
+                    Token = await _tokenService.CreateToken(admin)
+                });
+
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            } 
+
+        }
 
         [HttpPut("updateclient/{id}")]
-public async Task<IActionResult> UpdateClient(string id, ClientUpdateDto UpdateDto)
-{
-    var user = await _userManager.FindByIdAsync(id);
-
-    if (user == null)
-    {
-        return NotFound($"User with Id {id} not found.");
-    }
-
-    // Check if the email is being updated
-    if (user.Email != UpdateDto.Email)
-    {
-        // Check if the new email is already taken by another user
-        var existingUserWithEmail = await _userManager.FindByEmailAsync(UpdateDto.Email);
-        if (existingUserWithEmail != null && existingUserWithEmail.Id != id)
+        public async Task<IActionResult> UpdateClient(string id, ClientUpdateDto UpdateDto)
         {
-            return BadRequest("Email is already in use by another account.");
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound($"User with Id {id} not found.");
+            }
+
+            // Check if the email is being updated
+            if (user.Email != UpdateDto.Email)
+            {
+                // Check if the new email is already taken by another user
+                var existingUserWithEmail = await _userManager.FindByEmailAsync(UpdateDto.Email);
+                if (existingUserWithEmail != null && existingUserWithEmail.Id != id)
+                {
+                    return BadRequest("Email is already in use by another account.");
+                }
+
+                // Update the email if not in use
+                var emailResult = await _userManager.SetEmailAsync(user, UpdateDto.Email);
+                if (!emailResult.Succeeded)
+                {
+                    return BadRequest(emailResult.Errors);
+                }
+            }
+
+            // Update other fields
+            user.FirstName = UpdateDto.FirstName;
+            user.MiddleName = UpdateDto.MiddleName;
+            user.LastName = UpdateDto.LastName;
+            user.PhoneNumber = UpdateDto.PhoneNumber;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok("User updated successfully.");
         }
 
-        // Update the email if not in use
-        var emailResult = await _userManager.SetEmailAsync(user, UpdateDto.Email);
-        if (!emailResult.Succeeded)
-        {
-            return BadRequest(emailResult.Errors);
-        }
-    }
-
-    // Update other fields
-    user.FirstName = UpdateDto.FirstName;
-    user.MiddleName = UpdateDto.MiddleName;
-    user.LastName = UpdateDto.LastName;
-    user.PhoneNumber = UpdateDto.PhoneNumber;
-
-    var result = await _userManager.UpdateAsync(user);
-
-    if (!result.Succeeded)
-    {
-        return BadRequest(result.Errors);
-    }
-
-    return Ok("User updated successfully.");
-}
-
-       [HttpPut("change-password/{id}")]
+        [HttpPut("change-password/{id}")]
         public async Task<IActionResult> ChangePassword(string id, [FromBody] ClientPassDto changePasswordDto)
         {
             if (!ModelState.IsValid)
@@ -315,8 +357,9 @@ public async Task<IActionResult> UpdateClient(string id, ClientUpdateDto UpdateD
             var roles = await _userManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault();
 
-            return Ok(new NewUserDto
+            return Ok(new UserLoginDto
             {
+                UserId = user.Id,
                 UserName = user.UserName,
                 Email = user.Email,
                 Token = await _tokenService.CreateToken(user),

@@ -15,7 +15,7 @@ namespace WasteManagementApi.Repositories
         private readonly ApplicationDbContext _context;
         public NormalRequestRepository(ApplicationDbContext context)
         {
-            
+
             _context = context;
         }
         public async Task<NormalRequest> CreateNormalRequest(NormalRequest normalRequest)
@@ -25,10 +25,18 @@ namespace WasteManagementApi.Repositories
             return normalRequest;
         }
 
-        public async Task<List<NormalRequest>> GetRequestsByClientId(string clientId)
+        public async Task<List<NormalRequest>> GetAllRequests()
         {
-            var requests = await _context.NormalRequests.Where(x=>x.ClientId == clientId).ToListAsync();
+             var requests = await _context.NormalRequests.Include(x=>x.Bin).ToListAsync();
             return requests;
         }
+
+        public async Task<List<NormalRequest>> GetRequestsByClientId(string clientId)
+        {
+            var requests = await _context.NormalRequests.Where(x => x.ClientId == clientId).ToListAsync();
+            return requests;
+        }
+
+
     }
 }
