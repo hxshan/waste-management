@@ -7,14 +7,15 @@ import axios from "../../api/axios";
 
 const SpecialRequestForm = () => {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState("");
+  const [uId, setuId] = useState("");
 
   useEffect(() => {
 
-    setUserId("0001d9cc-6075-4935-8e1e-fed4cbf307db");
+    setuId('bb797925-dfae-4531-aadd-294a87fd73f2');
   }, []);
 
   const [formData, setFormData] = useState({
+    userId: uId,
     wasteType: "",
     location: "",
     contactNo: "",
@@ -22,7 +23,6 @@ const SpecialRequestForm = () => {
     specialInstructions: "",
     quantity: "",
     date: "",
-    immediate: false,
   });
 
   const handleChange = (e) => {
@@ -46,12 +46,17 @@ const SpecialRequestForm = () => {
     e.preventDefault();
     try {
       const submissionData = {
-        ...formData,
-        userId,
-        date: formData.immediate ? new Date().toISOString() : formData.date,
+        userId: uId,
+        scheduleDate: formData.immediate ? new Date().toISOString() : formData.date,
+        location: formData.location,
+        wasteType: formData.wasteType,
+        quantity: formData.quantity,
+        description: formData.description,
+        contactNo: formData.contactNo,
+        specialInstructions: formData.specialInstructions
       };
 
-      const response = await axios.post("/special-request/", {
+      const response = await axios.post(`special-request/${uId}`, {
         ...submissionData
       });
 
@@ -61,7 +66,7 @@ const SpecialRequestForm = () => {
           text: "Special request submitted successfully!",
           icon: "success",
         }).then(() => {
-          navigate("/admin-special-request");
+          navigate("/client");
         });
       } 
     } catch (error) {

@@ -21,13 +21,13 @@ namespace WasteManagementApi.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateSpecialRequest(SpecialRequestDto specialRequestDto)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> CreateSpecialRequest(string id, SpecialRequestDto specialRequestDto)
         {
             
                 var specialRequest = SpecialRequestMapper.MapSpecialRequestDtoToSpecialRequest(specialRequestDto);
                 var createdRequest = await _repository.CreateAsync(specialRequest);
-                return CreatedAtAction(nameof(GetSpecialRequest), new { id = createdRequest.Id }, createdRequest);
+                return CreatedAtAction(nameof(CreateSpecialRequest), new { id = createdRequest.Id }, createdRequest);
             
             
 
@@ -35,7 +35,7 @@ namespace WasteManagementApi.Controllers
 
 
 
-        [HttpGet("/user/{clientId}")]
+        [HttpGet("user/{clientId}")]
         public async Task<IActionResult> GetUserSpecialRequests(string clientId)
         {
             try
@@ -54,8 +54,8 @@ namespace WasteManagementApi.Controllers
 
         }
 
-        [HttpGet("/{requestId}")]
-        public async Task<IActionResult> GetSpecialRequest(string requestId)
+        [HttpGet("{requestId}")]
+        public async Task<IActionResult> GetSpecialRequest(int requestId)
         {
             var specialRequest = await _repository.GetByIdAsync(requestId);
             if (specialRequest == null)
@@ -63,6 +63,42 @@ namespace WasteManagementApi.Controllers
                 return NotFound();
             }
             return Ok(specialRequest);
+        }
+
+
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<SpecialRequest>>> GetAllSpecialReqests()
+        {
+            var specialRequests = await _repository.GetAllAsync();
+            return Ok(specialRequests);
+        }
+
+         [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSpecialRequest(int id, SpecialRequestDto specialRequestDto)
+        {
+            var existingRequest = await _repository.GetByIdAsync(id);
+            if (existingRequest == null)
+            {
+                return NotFound();
+            }
+
+            SpecialRequestMapper.UpdateSpecialRequestFromDto(existingRequest, specialRequestDto);
+
+            var updatedRequest = await _repository.UpdateAsync(existingRequest);
+            return Ok(updatedRequest);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSpecialRequest(int id)
+        {
+            var existingRequest = await _repository.GetByIdAsync(id);
+            if (existingRequest == null)
+            {
+                return NotFound();
+            }
+
+            await _repository.DeleteAsync(id);
+            return NoContent();
         }
 
     }
