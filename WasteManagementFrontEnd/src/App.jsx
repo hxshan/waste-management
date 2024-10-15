@@ -76,8 +76,6 @@ function App() {
               <Route path="/payment" element={<CardPayment/>}/>
               <Route path="/shedule" element={<ClientShedule/>}/>
 
-
-
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/bin-registraion" element={<BinRegistration />} />
               <Route path="/binlist" element={<BinList />} />
