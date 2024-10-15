@@ -6,25 +6,31 @@ const containerStyle = {
     height: '400px',
 };
 
-const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY.trim()
-const MapPicker = ({ onAddressSelect  }) => {
+const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY.trim();
+
+const MapPicker = ({ 
+    onAddressSelect, 
+    showTextfield = true, 
+    latitude: initialLat, 
+    longitude: initialLng 
+}) => {
     const [address, setAddress] = useState('');
-    const [latitude, setLatitude] = useState(null);
-    const [longitude, setLongitude] = useState(null);
+    const [latitude, setLatitude] = useState(initialLat || null);
+    const [longitude, setLongitude] = useState(initialLng || null);
     const [map, setMap] = useState(null);
-    const [markerPosition, setMarkerPosition] = useState(null);
+    const [markerPosition, setMarkerPosition] = useState(
+        initialLat && initialLng ? { lat: initialLat, lng: initialLng } : null
+    );
 
     const center = {
-        lat: latitude || 34.0522, // Default latitude
-        lng: longitude || -118.2437, // Default longitude
+        lat: latitude || 34.0522, // Default latitude (Los Angeles)
+        lng: longitude || -118.2437, // Default longitude (Los Angeles)
     };
 
     useEffect(() => {
-        if (window.google) {
-            const geocoder = new window.google.maps.Geocoder();
-            // If marker position changes, set the map center
+        if (window.google && map) {
             if (markerPosition) {
-                map.panTo(markerPosition);
+                map.panTo(markerPosition); // Center the map on the marker
             }
         }
     }, [markerPosition, map]);
@@ -38,7 +44,7 @@ const MapPicker = ({ onAddressSelect  }) => {
                     const location = result.geometry.location;
                     setLatitude(location.lat());
                     setLongitude(location.lng());
-                    setMarkerPosition(location);
+                    setMarkerPosition({ lat: location.lat(), lng: location.lng() });
                     setAddress(result.formatted_address); // Save the formatted address
                     onAddressSelect(result.formatted_address, location.lat(), location.lng()); // Callback to pass address and coords
                 } else {
@@ -51,14 +57,17 @@ const MapPicker = ({ onAddressSelect  }) => {
     return (
         <LoadScript googleMapsApiKey={googleMapsApiKey}>
             <div>
-                <input
-                    type="text"
-                    placeholder="Enter address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    onKeyDown={handleAddressSubmit}
-                    className="p-2 border border-gray-300 rounded"
-                />
+                {/* Conditionally render the text field for address input */}
+                {showTextfield && (
+                    <input
+                        type="text"
+                        placeholder="Enter address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        onKeyDown={handleAddressSubmit}
+                        className="p-2 border border-gray-300 rounded mb-4"
+                    />
+                )}
                 <GoogleMap
                     mapContainerStyle={containerStyle}
                     center={center}
@@ -73,4 +82,5 @@ const MapPicker = ({ onAddressSelect  }) => {
         </LoadScript>
     );
 };
+
 export default MapPicker;
