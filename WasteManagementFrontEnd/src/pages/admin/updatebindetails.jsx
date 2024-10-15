@@ -1,72 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const BinRegistrationForm = () => {
-  const [clientId, setClientId] = useState("");
-  const [location, setLocation] = useState("");
-  const [maxWasteCap, setMaxWasteCap] = useState("");
-  const [currentWasteLevel, setCurrentWasteLevel] = useState("");
-  const [status, setStatus] = useState("");
-  const [binType, setBinType] = useState("");
+const BinUpdateForm = () => {
+  const [binData, setBinData] = useState({
+    id: 0,
+    clientId: "",
+    location: "",
+    maxWasteCap: "",
+    currentWasteLevel: "",
+    status: "",
+    binType: ""
+  });
 
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  // Handle form submission and save
-  const handleSave = async () => {
-    const url = "http://localhost:5290/api/Bins";
-    const newData = {
-      clientId: clientId,
-      location: location,
-      maxWasteCap: parseFloat(maxWasteCap),
-      currentWasteLevel: parseFloat(currentWasteLevel),
-      status: status,
-      binType: binType,
+  useEffect(() => {
+    const fetchBinDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5290/api/Bins/${id}`);
+        const data = response.data;
+        setBinData({
+          id: data.id,
+          clientId: data.clientId,
+          location: data.location,
+          maxWasteCap: data.maxWasteCap.toString(),
+          currentWasteLevel: data.currentWasteLevel.toString(),
+          status: data.status,
+          binType: data.binType
+        });
+      } catch (error) {
+        toast.error("Failed to fetch bin details");
+        console.error(error.response?.data || error.message);
+      }
     };
+
+    fetchBinDetails();
+  }, [id]);
+
+  const handleUpdate = async () => {
+    const url = `http://localhost:5290/api/Bins/${id}`;
+    const updatedData = {
+      ...binData,
+      maxWasteCap: parseFloat(binData.maxWasteCap),
+      currentWasteLevel: parseFloat(binData.currentWasteLevel)
+    };
+    console.log("Data being sent to API:", updatedData);
     try {
-      console.log(newData);
-      await axios.post(url, newData);
-      toast.success("Bin has been added");
+      const response = await axios.put(url, updatedData);
+      console.log("API Response:", response.data);
+      toast.success("Bin has been updated");
       navigate("/binlist");
     } catch (error) {
-      toast.error("Failed to add new bin");
-      console.error(error.response.data);
+      toast.error("Failed to update bin");
+      console.error("Error details:", error.response?.data || error.message);
     }
   };
 
-  // Handle input changes and update the respective state
   const handleChange = (e) => {
     const { name, value } = e.target;
-    switch (name) {
-      case "clientId":
-        setClientId(value);
-        break;
-      case "location":
-        setLocation(value);
-        break;
-      case "maxWasteCap":
-        setMaxWasteCap(value);
-        break;
-      case "currentWasteLevel":
-        setCurrentWasteLevel(value);
-        break;
-      case "status":
-        setStatus(value);
-        break;
-      case "binType":
-        setBinType(value);
-        break;
-      default:
-        break;
-    }
+    setBinData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center">Bin Registration</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Update Bin</h2>
 
         <div className="mb-4">
           <label htmlFor="clientId" className="block text-sm font-medium text-gray-700 mb-2">
@@ -77,7 +82,7 @@ const BinRegistrationForm = () => {
             name="clientId"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter Client ID"
-            value={clientId}
+            value={binData.clientId}
             onChange={handleChange}
           />
         </div>
@@ -91,7 +96,7 @@ const BinRegistrationForm = () => {
             name="location"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter Location"
-            value={location}
+            value={binData.location}
             onChange={handleChange}
           />
         </div>
@@ -105,8 +110,9 @@ const BinRegistrationForm = () => {
             name="maxWasteCap"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter Max Waste Capacity"
-            value={maxWasteCap}
+            value={binData.maxWasteCap}
             onChange={handleChange}
+            step="0.01"
           />
         </div>
 
@@ -117,10 +123,11 @@ const BinRegistrationForm = () => {
           <input
             type="number"
             name="currentWasteLevel"
-            value={currentWasteLevel}
+            value={binData.currentWasteLevel}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter Current Waste Level"
+            step="0.01"
           />
         </div>
         
@@ -133,7 +140,7 @@ const BinRegistrationForm = () => {
             name="status"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter Status"
-            value={status}
+            value={binData.status}
             onChange={handleChange}
           />
         </div>
@@ -145,7 +152,7 @@ const BinRegistrationForm = () => {
           <select
             name="binType"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={binType}
+            value={binData.binType}
             onChange={handleChange}
           >
             <option value="">Select Bin Type</option>
@@ -156,10 +163,10 @@ const BinRegistrationForm = () => {
         </div>
 
         <button
-          onClick={handleSave}
-          className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300"
+          onClick={handleUpdate}
+          className="w-full bg-green-800 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
         >
-          Register
+          Update
         </button>
       </div>
       <ToastContainer />
@@ -167,4 +174,4 @@ const BinRegistrationForm = () => {
   );
 };
 
-export default BinRegistrationForm;
+export default BinUpdateForm;
