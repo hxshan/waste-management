@@ -65,6 +65,5 @@ namespace WasteManagementApi.Controllers
             return Ok(specialRequest);
         }
 
-        // Implement other CRUD operations as needed
     }
 }

@@ -214,7 +214,7 @@ namespace WasteManagementApi.Controllers
 
             try
             {
-                Console.Write(registerDto);
+                
                 if (!ModelState.IsValid)
                 {
                     return BadRequest("Invalid Data Format");
