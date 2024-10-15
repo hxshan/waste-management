@@ -82,7 +82,7 @@ const SpecialRequestDetailAdmin = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen p-8">
+    <div className="bg-gray-100 min-h-full p-8 pt-20">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
         <div className="bg-green-600 p-4 text-white flex justify-between items-center">
           <h1 className="text-2xl font-bold">Special Request Details</h1>
