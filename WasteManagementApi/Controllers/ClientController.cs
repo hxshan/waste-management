@@ -25,14 +25,21 @@ namespace WasteManagementApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetAllClients()
+        public async Task<ActionResult> GetAllClients()
         {
-            var clients = await _clientRepository.GetAllClientsAsync();
-            return Ok(clients);
+            try
+            {
+
+                var clients = await _clientRepository.GetAllClientsAsync();
+                return Ok(clients);
+            }
+            catch (Exception ex) {
+                return Problem("Something Went wrong");
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClientDetailsDto>> GetClient(String id)
+        public async Task<ActionResult> GetClient(String id)
         {
             var client = await _clientRepository.GetClientByIdAsync(id);
 
@@ -44,28 +51,7 @@ namespace WasteManagementApi.Controllers
             return Ok(ClientMapper.MapClientToClientDto(client));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateClient(String id, ClientUpdateDto clientDto)
-        {
-           
-            try
-            {
-                await _clientRepository.UpdateClientAsync(id,clientDto);
-            }
-            catch (Exception)
-            {
-                if (!await ClientExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        
 
         [HttpPost("collection-request/{userid}")]
         public async Task<IActionResult> CreateCollectionRequest(string userid,NormalRequestDto requestDto){

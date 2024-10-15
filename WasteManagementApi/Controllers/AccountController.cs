@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using WasteManagementApi.Dtos.AccountDtos;
+using WasteManagementApi.Dtos.clientDtos;
 using WasteManagementApi.Interfaces;
 using WasteManagementApi.Mappers;
 using WasteManagementApi.Models;
@@ -55,7 +56,7 @@ namespace WasteManagementApi.Controllers
         //         if (!CreatedUser.Succeeded)
         //         {
         //             return StatusCode(500, CreatedUser.Errors);
-                    
+
         //         }
 
         //         var roleResult = await _userManager.AddToRoleAsync(appUser, "USER");
@@ -95,7 +96,7 @@ namespace WasteManagementApi.Controllers
 
                 if (!CreatedUser.Succeeded)
                 {
-                    return StatusCode(500, CreatedUser.Errors);
+                    return Problem("Error When Creating the User");
 
                 }
 
@@ -103,7 +104,7 @@ namespace WasteManagementApi.Controllers
 
                 if (!roleResult.Succeeded)
                 {
-                    return StatusCode(500, roleResult.Errors);
+                    return Problem("Error When Assigning the User their Role");
 
                 }
                 return Ok(new NewUserDto
@@ -116,13 +117,13 @@ namespace WasteManagementApi.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e);
+                return StatusCode(500, e.Message);
             }
 
         }
-        
-        
-        
+
+
+
         [HttpPost("register-helper")]
         public async Task<IActionResult> RegisterHelper([FromBody] HelperRegisterDto registerDto)
         {
@@ -166,9 +167,9 @@ namespace WasteManagementApi.Controllers
 
 
         [HttpPost("register-client")]
-        public async Task<IActionResult> RegisterClient([FromBody]  ClientRegisterDto registerDto)
+        public async Task<IActionResult> RegisterClient([FromBody] ClientRegisterDto registerDto)
         {
-           
+
             try
             {
                 Console.Write(registerDto);
@@ -208,11 +209,91 @@ namespace WasteManagementApi.Controllers
 
         }
 
+        [HttpPut("updateclient/{id}")]
+public async Task<IActionResult> UpdateClient(string id, ClientUpdateDto UpdateDto)
+{
+    var user = await _userManager.FindByIdAsync(id);
+
+    if (user == null)
+    {
+        return NotFound($"User with Id {id} not found.");
+    }
+
+    // Check if the email is being updated
+    if (user.Email != UpdateDto.Email)
+    {
+        // Check if the new email is already taken by another user
+        var existingUserWithEmail = await _userManager.FindByEmailAsync(UpdateDto.Email);
+        if (existingUserWithEmail != null && existingUserWithEmail.Id != id)
+        {
+            return BadRequest("Email is already in use by another account.");
+        }
+
+        // Update the email if not in use
+        var emailResult = await _userManager.SetEmailAsync(user, UpdateDto.Email);
+        if (!emailResult.Succeeded)
+        {
+            return BadRequest(emailResult.Errors);
+        }
+    }
+
+    // Update other fields
+    user.FirstName = UpdateDto.FirstName;
+    user.MiddleName = UpdateDto.MiddleName;
+    user.LastName = UpdateDto.LastName;
+    user.PhoneNumber = UpdateDto.PhoneNumber;
+
+    var result = await _userManager.UpdateAsync(user);
+
+    if (!result.Succeeded)
+    {
+        return BadRequest(result.Errors);
+    }
+
+    return Ok("User updated successfully.");
+}
+
+       [HttpPut("change-password/{id}")]
+        public async Task<IActionResult> ChangePassword(string id, [FromBody] ClientPassDto changePasswordDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound("User not found.");
+
+            // Verify the old password
+            var isOldPasswordValid = await _userManager.CheckPasswordAsync(user, changePasswordDto.oldPassword);
+            if (!isOldPasswordValid)
+                return BadRequest("The current password is incorrect.");
+
+            // Check if the new password is different from the old one
+            if (changePasswordDto.oldPassword == changePasswordDto.NewPassword)
+                return BadRequest("The new password must be different from the current password.");
+
+            // Validate password complexity
+            var passwordValidator = new PasswordValidator<User>();
+            var passwordCheck = await passwordValidator.ValidateAsync(_userManager, null, changePasswordDto.NewPassword);
+
+            if (!passwordCheck.Succeeded)
+                return BadRequest(passwordCheck.Errors.Select(e => e.Description));
+
+
+            // Change password
+            var result = await _userManager.ChangePasswordAsync(user, changePasswordDto.oldPassword, changePasswordDto.NewPassword);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok("Password updated successfully.");
+        }
+
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
@@ -238,7 +319,7 @@ namespace WasteManagementApi.Controllers
             {
                 UserName = user.UserName,
                 Email = user.Email,
-                Token =  await _tokenService.CreateToken(user),
+                Token = await _tokenService.CreateToken(user),
                 Role = role
             });
 
