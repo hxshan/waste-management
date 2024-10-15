@@ -24,12 +24,22 @@ namespace WasteManagementApi.Controllers
         [HttpPost("{id}")]
         public async Task<IActionResult> CreateSpecialRequest(string id, SpecialRequestDto specialRequestDto)
         {
-            
+            try
+            {
                 var specialRequest = SpecialRequestMapper.MapSpecialRequestDtoToSpecialRequest(specialRequestDto);
                 var createdRequest = await _repository.CreateAsync(specialRequest);
                 return CreatedAtAction(nameof(CreateSpecialRequest), new { id = createdRequest.Id }, createdRequest);
-            
-            
+            }
+            catch (Exception e)
+            {
+
+                return Problem("Error When Creating Special Request");
+            }
+
+
+
+
+
 
         }
 
@@ -46,7 +56,7 @@ namespace WasteManagementApi.Controllers
             }
             catch (Exception e)
             {
-                return Problem("Error in Retriving Client Special Requests");
+                return Problem("Error in create Client Special Requests");
             }
 
 
@@ -57,23 +67,40 @@ namespace WasteManagementApi.Controllers
         [HttpGet("{requestId}")]
         public async Task<IActionResult> GetSpecialRequest(int requestId)
         {
-            var specialRequest = await _repository.GetByIdAsync(requestId);
-            if (specialRequest == null)
+            try
             {
-                return NotFound();
+                var specialRequest = await _repository.GetByIdAsync(requestId);
+                if (specialRequest == null)
+                {
+                    return NotFound();
+                }
+                return Ok(specialRequest);
+
             }
-            return Ok(specialRequest);
+            catch (Exception e)
+            {
+                return Problem("Error in Retriving Client Special Request by request id");
+            }
+
         }
 
 
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<SpecialRequest>>> GetAllSpecialReqests()
         {
-            var specialRequests = await _repository.GetAllAsync();
-            return Ok(specialRequests);
+            try
+            {
+                var specialRequests = await _repository.GetAllAsync();
+                return Ok(specialRequests);
+            }
+            catch (Exception e)
+            {
+                return Problem("Error in Retriving Client Special Request");
+            }
+
         }
 
-         [HttpPut("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSpecialRequest(int id, SpecialRequestDto specialRequestDto)
         {
             var existingRequest = await _repository.GetByIdAsync(id);
