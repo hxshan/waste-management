@@ -51,9 +51,9 @@ namespace WasteManagementApi.Mappers
             };
 
         }
-        public static HelperStaff MapAdminRegisterToAdmin(AdminRegisterDto registerDto)
+        public static AdminStaff MapAdminRegisterToAdmin(AdminRegisterDto registerDto)
         {
-            return new HelperStaff
+            return new AdminStaff
             {
                 UserName = registerDto.FirstName + registerDto.LastName,
                 Email = registerDto.Email,

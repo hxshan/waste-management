@@ -25,9 +25,9 @@ namespace WasteManagementApi.Repositories
             return normalRequest;
         }
 
-        public async Task<List<NormalRequest>> GetRequests()
+        public async Task<List<NormalRequest>> GetAllRequests()
         {
-             var requests = await _context.CollectionRequests.OfType<NormalRequest>().ToListAsync();
+             var requests = await _context.NormalRequests.Include(x=>x.Bin).ToListAsync();
             return requests;
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace WasteManagementApi.Models
@@ -16,6 +17,7 @@ namespace WasteManagementApi.Models
         public string? Status { get; set; }   
         public string? BinType { get; set; }
 
+        [JsonIgnore]
         public ICollection<NormalRequest> CollectionRequests { get; set; }
 
     }

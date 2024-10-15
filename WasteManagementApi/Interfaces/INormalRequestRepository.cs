@@ -10,7 +10,7 @@ namespace WasteManagementApi.Interfaces
     {
         Task<NormalRequest> CreateNormalRequest(NormalRequest normalRequest);
         Task<List<NormalRequest>> GetRequestsByClientId(string clientId);
-        Task<List<NormalRequest>> GetRequests();
+        Task<List<NormalRequest>> GetAllRequests();
        
     }
 }

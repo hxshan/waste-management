@@ -209,7 +209,7 @@ namespace WasteManagementApi.Controllers
 
         }
         [HttpPost("register-admin")]
-        public async Task<IActionResult> RegisterAdmin([FromBody] ClientRegisterDto registerDto)
+        public async Task<IActionResult> RegisterAdmin([FromBody] AdminRegisterDto registerDto)
         {
 
             try
@@ -219,7 +219,7 @@ namespace WasteManagementApi.Controllers
                 {
                     return BadRequest("Invalid Data Format");
                 }
-                var admin = AccountMapper.MapClientRegisterToClient(registerDto);
+                var admin = AccountMapper.MapAdminRegisterToAdmin(registerDto);
 
                 var CreatedUser = await _userManager.CreateAsync(admin, registerDto.Password);
 

@@ -98,7 +98,7 @@ const findRoute = () => {
 };
 
   return (
-    <div className="w-full">
+    <div className="w-[80%]">
       <LoadScript googleMapsApiKey={googleMapsApiKey}>
         <GoogleMap
           mapContainerStyle={mapContainerStyle}

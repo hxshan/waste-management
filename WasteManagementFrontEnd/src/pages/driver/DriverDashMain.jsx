@@ -12,7 +12,7 @@ const DriverDashMain = () => {
 
   const fetchCollectionReq = async () => {
     try {
-      const response = await axios.get(`client/collection-request/${user?.userid}`);
+      const response = await axios.get(`driver/collections`);
       console.log(response.data);
       setEvents(response.data);
     } catch (error) {
@@ -47,12 +47,12 @@ const DriverDashMain = () => {
       
       <div className="flex-1 bg-white p-4 rounded shadow">
         <h2 className="text-lg font-semibold mb-4">Upcoming Collections</h2>
-        {events.map((event,index)=>{
+        {events.slice(-5).map((event,index)=>{
           return(
         
           <div  key={index} className="bg-gray-100 p-3 rounded mb-2">
-            <div className="font-semibold">Collection At :{event.location}</div>
-            <div className="text-sm text-gray-600">Waste type : Plastic</div>
+            <div className="font-semibold">Collection At :{event.bin?.location}</div>  
+            <div className="text-sm text-gray-600">Waste type : {event.wasteType}</div>
             <div className="text-sm text-gray-600">ETA: 15 mins</div>
           </div>
       )

@@ -22,7 +22,7 @@ namespace WasteManagementApi.Controllers
         [HttpGet("collections")]
         public async Task<IActionResult> GetCollections()
         {
-            var collections = await _normalReqRepo.GetRequests();
+            var collections = await _normalReqRepo.GetAllRequests();
             return Ok(collections);
 
         }
