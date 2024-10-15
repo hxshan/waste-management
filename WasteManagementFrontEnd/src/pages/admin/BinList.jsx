@@ -7,21 +7,30 @@ import { useNavigate } from 'react-router-dom';
 
 const BinList = () => {
   const [bins, setBins] = useState([]);
-
   const navigate = useNavigate();
 
-  // Fetch bins from the API
+  const calculateBinStatus = (currentWasteLevel, maxWasteCap) => {
+    const fillPercentage = (currentWasteLevel / maxWasteCap) * 100;
+    return fillPercentage >= 90 ? 'Full' : 'Not Full';
+  };
+
   const getData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5290/api/Bins`); // Adjust this URL if necessary
-      setBins(response.data);
+      const response = await axios.get(`http://localhost:5290/api/Bins`);
+      const binsWithCalculatedStatus = response.data.map(bin => ({
+        ...bin,
+        status: calculateBinStatus(bin.currentWasteLevel, bin.maxWasteCap),
+        fillPercentage: ((bin.currentWasteLevel / bin.maxWasteCap) * 100).toFixed(2)
+      }));
+      setBins(binsWithCalculatedStatus);
     } catch (error) {
       console.error('Error fetching bins:', error);
+      toast.error('Failed to fetch bins');
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete") === true) {
+    if (window.confirm("Are you sure you want to delete this bin?")) {
       try {
         const result = await axios.delete(`http://localhost:5290/api/Bins/${id}`);
         if (result.status === 200) {
@@ -38,30 +47,57 @@ const BinList = () => {
     navigate(`/edit-bin/${id}`);
   };
 
+  const generateReport = () => {
+    // Create CSV content
+    const headers = ["Client ID", "Location", "Max Waste Cap", "Current Waste Level", "Fill Percentage", "Status", "Bin Type"];
+    const csvContent = [
+      headers.join(','),
+      ...bins.map(bin => [
+        bin.clientId,
+        bin.location,
+        bin.maxWasteCap,
+        bin.currentWasteLevel,
+        bin.fillPercentage + '%',
+        bin.status,
+        bin.binType
+      ].join(','))
+    ].join('\n');
+
+    // Create a Blob with the CSV content
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a link and trigger the download
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'bin_report.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast.success("Report generated and download started");
+  };
+
   useEffect(() => {
     getData();
   }, []);
 
   return (
-    
     <div className="p-6 max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        
-        <div className="flex justify-between w-full max-w-5xl mb-4">
-        <button
-          //onClick={generateReport}
-          className="p-2 bg-orange-500 text-white rounded"
+      <h1 className="text-2xl align-middle font-bold my-10">Registered Bins List</h1>
+      <div className="flex justify-end gap-5 mb-10 w-full ">
+        <button 
+          onClick={generateReport}
+          className="py-1 px-2 font-bold text-xs bg-red-500 text-white rounded"
         >
           Generate Report
         </button>
-        <h1 className="text-2xl font-bold mb-4">Registered Bins List</h1>
         <button
           onClick={() => navigate('/bin-registraion')}
-          className="p-2 bg-green-500 text-white rounded"
+          className="py-1 px-2 font-bold text-xs bg-blue-500 text-white rounded"
         >
           Add New Bin
         </button>
-      </div>
       </div>
       <div className="overflow-x-auto bg-white rounded-lg shadow">
         <table className="w-full table-auto">
@@ -72,6 +108,7 @@ const BinList = () => {
               <th className="border border-gray-300 p-2">Location</th>
               <th className="border border-gray-300 p-2">Max Waste Cap</th>
               <th className="border border-gray-300 p-2">Current Waste Level</th>
+              <th className="border border-gray-300 p-2">Fill Percentage</th>
               <th className="border border-gray-300 p-2">Status</th>
               <th className="border border-gray-300 p-2">Bin Type</th>
               <th className="border border-gray-300 p-2">Actions</th>
@@ -85,6 +122,7 @@ const BinList = () => {
                 <td className="border border-gray-300 p-2">{bin.location}</td>
                 <td className="border border-gray-300 p-2">{bin.maxWasteCap}</td>
                 <td className="border border-gray-300 p-2">{bin.currentWasteLevel}</td>
+                <td className="border border-gray-300 p-2">{bin.fillPercentage}%</td>
                 <td className="border border-gray-300 p-2">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                     bin.status === 'Full' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
@@ -96,13 +134,13 @@ const BinList = () => {
                 <td className="border border-gray-300 p-2">
                   <button 
                     onClick={() => handleEdit(bin.id)}
-                    className="text-red-600 hover:text-red-900 mr-2">
+                    className="text-blue-600 hover:text-blue-900 mr-2">
                     <span className="sr-only">Edit</span>
                     ✏️
                   </button>
                   <button 
                     onClick={() => handleDelete(bin.id)}
-                    className="text-blue-600 hover:text-blue-900">
+                    className="text-red-600 hover:text-red-900">
                     <span className="sr-only">Delete</span>
                     🗑️
                   </button>

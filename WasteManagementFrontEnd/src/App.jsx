@@ -1,4 +1,4 @@
-import ClientDashboard from "./pages/client/ClientDashboard";
+
 import { useState} from "react";
 import { Route, Routes, useLocation  } from "react-router-dom";
 import ClientRequest from "./pages/client/ClientRequest";
@@ -13,23 +13,20 @@ import Topbar from "./pages/shared/Topbar";
 import SpecialRequestForm from "./pages/client/SpecialRequestForm";
 import ClientHome from "./pages/client/ClientHome";
 import AdminSpecialRequestForm from "./pages/admin/AdminSpecialRequestForm";
-import ClientDashMain from "./pages/client/ClientDashMain";
+import ClientDashMain from "./pages/client/ClientDashMain.jsx";
 import ClientProfile from "./pages/client/ClientProfile";
 import ClientBill from "./pages/client/ClientBill";
 import ClientShedule from "./pages/client/ClientShedule";
-
-
 
 import SpecialRequestClient from "./components/Client/SpecialRequestClient";
 import BinRegistration from "./pages/admin/BinRegisterForm";
 import BinList from "./pages/admin/BinList";
 import BinRequestForm from "./pages/client/BinRequestForm.jsx";
 import BinRequestList from "./pages/admin/BinRequestlist.jsx";
-import EditBin from "./pages/admin/updatebindetails.jsx"
+import EditBin from "./pages/admin/updatebindetails.jsx";
 import ClientAllSpecialRequests from "./pages/client/ClientAllSpecialRequests.jsx";
 import SpecialRequestDetailAdmin from "./pages/admin/SpecialRequestDetailAdmin.jsx";
 import CardPayment from "./pages/client/CardPayment.jsx";
-
 
 
 function App() {
@@ -48,7 +45,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/login" element={<Login />} />
 
-            <Route path="/client" element={<ClientDashboard />} />
+            {/* <Route path="/client" element={<ClientDashboard />} /> */}
             <Route path="/client-register" element={<ClientRegister />} />
             <Route
               path="/client-special-requst"
