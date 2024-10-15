@@ -38,8 +38,6 @@ namespace WasteManagementApi.Controllers
             }
         }
 
-
-
         [HttpPut("{driverid}/assign-truckdriver/{truckid}")]
         public async Task<IActionResult> AssignTruckDriver(string driverid,int truckid){
             

@@ -52,6 +52,7 @@ export const UserProvider = ({ children }) =>{
             if(res.status == 200){    
                 localStorage.setItem("token",res.data.token);
                 const userObj ={
+                    userid:res?.data?.userId,
                     userName: res?.data?.userName,
                     email: res?.data?.email,
                     role:res?.data?.role
@@ -61,7 +62,10 @@ export const UserProvider = ({ children }) =>{
                 SetUser(userObj);
                 switch(res?.data.role){
                     case 'Driver':
-                        navigate("/client");
+                        navigate("/driver");
+                        break;
+                    case 'Admin':
+                        navigate("/admin");
                         break;
                     default : 
                         navigate("/client")

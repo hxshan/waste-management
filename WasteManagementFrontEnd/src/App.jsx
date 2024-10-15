@@ -25,6 +25,7 @@ import BinList from "./pages/admin/BinList";
 import BinRequestForm from "./pages/client/BinRequestForm.jsx";
 import BinRequestList from "./pages/admin/BinRequestlist.jsx";
 import CardPayment from "./pages/client/CardPayment.jsx";
+import DriverDashboard from "./pages/driver/DriverDashboard.jsx";
 
 
 function App() {
@@ -56,7 +57,7 @@ function App() {
               <Route path="/shedule" element={<ClientShedule/>}/>
 
 
-              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/driver" element={<DriverDashboard />} />
               
               <Route path="/bin-registraion" element={<BinRegistration />} />
               <Route path="/binlist" element={<BinList />} />

@@ -8,6 +8,7 @@ namespace WasteManagementApi.Interfaces
 {
     public interface ITruckRepository
     {
+        Task<Truck> CreateTruckAsync(Truck truck);
         Task<Truck> GetTruckByIdAsync(int id);
         Task<bool> IsAssingedToDriver(int id);
     }

@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import ClientNavigationBar from "../shared/ClientNavigationBar";
 import ClientFooter from "../shared/ClientFooter";
+import axios from "../../api/axios";
+import { useAuth } from "../../context/useAuth";
+import Swal from "sweetalert2";
 
 const DashboardCard = ({ title, value, icon: Icon }) => (
   <div className="bg-white p-4 rounded-lg shadow-md">
@@ -49,17 +52,23 @@ const Alert = ({ title, children }) => (
   </div>
 );
 
+
 const ClientDashMain = () => {
+
+  const {user} = useAuth();
+
   const upcomingSchedules = [
     { date: '2024-10-15', time: '10:00 AM', type: 'General Waste' },
     { date: '2024-10-20', time: '11:00 AM', type: 'Recycling' },
   ];
 
-  const binData = {
+  const [binData,setBinData]=useState({
     totalBins: 3,
     filledBins: 1,
     collectionType: 'Weekly',
-  };
+  })
+
+
 
   const specialRequests = [
     { id: 1, request: 'Large bin for garden waste', status: 'Pending' },
@@ -74,6 +83,34 @@ const ClientDashMain = () => {
     { name: 'May', amount: 189 },
     { name: 'Jun', amount: 239 },
   ];
+  const [events, setEvents] = useState([]);
+
+  const fetchBins = async () => {
+    try {
+      const response = await axios.get(`Bins/client/${user?.userid}`); 
+      setBinData((prevData) => ({
+        ...prevData,
+        totalBins: response.data.length 
+      }));
+      
+    } catch (error) {
+      console.error("Error fetching bins:", error);
+    }
+  };
+
+  const fetchCollectionReq = async () => {
+    try {
+      const response = await axios.get(`client/collection-request/${user?.userid}`);
+      setEvents(response.data.slice(-5));
+    } catch (error) {
+      console.error("Error fetching collection requests:", error);
+    }
+  };
+
+  useEffect(()=>{
+    fetchBins();
+    fetchCollectionReq();
+  },[])
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
@@ -101,36 +138,21 @@ const ClientDashMain = () => {
           </Card>
 
           <Card title="Upcoming Collections">
-            {upcomingSchedules.map((schedule, index) => (
+            {events.map((event, index) => (
               <div key={index} className="mb-4 last:mb-0">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="font-semibold">{schedule.date}</p>
-                    <p className="text-sm text-gray-500">{schedule.time}</p>
+                    <p className="font-semibold">{event.scheduleDate.split('T')[0]}</p>
+                    <p className="text-sm text-gray-500">{event.scheduleDate.split('T')[1]}</p>
                   </div>
-                  <Badge>{schedule.type}</Badge>
+                  <Badge>{event.wasteType}</Badge>
                 </div>
               </div>
             ))}
           </Card>
         </div>
 
-        <Card title="Special Requests" className="mt-6">
-          {specialRequests.map((request) => (
-            <div key={request.id} className="mb-4 last:mb-0">
-              <div className="flex justify-between items-center">
-                <p>{request.request}</p>
-                <Badge variant={request.status === 'Pending' ? 'warning' : 'success'}>
-                  {request.status}
-                </Badge>
-              </div>
-            </div>
-          ))}
-        </Card>
 
-        <Alert title="Heads up!" className="mt-6">
-          Your next collection is coming up soon. Make sure your bins are ready for collection.
-        </Alert>
       </main>
       <ClientFooter />
     </div>

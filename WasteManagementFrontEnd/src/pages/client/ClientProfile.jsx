@@ -5,10 +5,12 @@ import axios from '../../api/axios';
 import MapPicker from '../../components/MapPicker';
 import { UserCircle, MapPin, Phone, CreditCard, Key , Mail } from 'lucide-react';
 import PasswordReset from './PasswordReset';
+import { useAuth } from '../../context/useAuth';
 
 
 const ClientProfile = () => {
-  const userID = "89613071-bfa1-4de7-b993-d6ef1c6d2fe6";
+  const {user} = useAuth()
+  const userID = user?.userid;
   const [userDetails, setUserDetails] = useState({
     firstName: 'loading..',
     middleName: 'loading..',

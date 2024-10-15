@@ -52,5 +52,11 @@ namespace WasteManagementApi.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<Bin>> GetBinsByClientIdAsync(string id)
+        {
+             var bin = await _context.Bins.Where(b=>b.ClientId == id).ToListAsync();
+             return bin;
+        }
     }
 }
